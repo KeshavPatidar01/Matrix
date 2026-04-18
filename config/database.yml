@@ -9,6 +9,10 @@ development:
 test:
   <<: *default
   database: brain_power_test
+
+
 production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+    <<: *default
+    database: your_app_production
+    
