@@ -1,3 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-mail(to: user.email, from: "fearlessgaming9876@gmail.com", subject: "Welcome!")
+  default from: "fearlessgaming9876@gmail.com"
+  layout "mailer"
 end
