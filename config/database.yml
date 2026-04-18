@@ -3,14 +3,7 @@ default: &default
   pool: 5
   timeout: 5000
 
+
+
 production:
-  adapter: postgresql
-  url: <%= ENV["DATABASE_URL"] %>
-
-  cable:
-    <<: *default
-    database: matrix_dut9
-
-  queue:
-    <<: *default
-    database: matrix_dut9
+  url: <%= ENV.fetch("DATABASE_URL") %>
