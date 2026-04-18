@@ -1,6 +1,3 @@
-# app/services/gemini_ai_service.rb
-require "gemini-ai"
-
 class GeminiAiService
   # ✅ ENV variable का नाम GEMINI_API_KEY होना चाहिए
   unless ENV["GEMINI_API_KEY"].present?
