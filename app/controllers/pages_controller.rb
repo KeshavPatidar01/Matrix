@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
-    before_action :authenticate_user! , except: %i[landing]
+    before_action :authenticate_user!, except: %i[landing]
 
-    
+
   def landing
   end
 
@@ -9,31 +9,24 @@ class PagesController < ApplicationController
     @topics = Topic.all
   end
 
-  def brain 
-
-    
-
-  end 
+  def brain
+  end
 
   def language
-   
-
   end
-  def questions 
+  def questions
     if params[:q].present?
     @user_query = Question.search(params[:q])
-    return
+    nil
     end
   end
-   
- 
-  def roadmap 
 
-  end 
+
+  def roadmap
+  end
   def privacy
   end
 
   def pricing
   end
-
 end

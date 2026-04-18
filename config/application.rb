@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 module BrainPower
   class Application < Rails::Application
-        # **ADD THIS CODE BLOCK HERE**
+    # **ADD THIS CODE BLOCK HERE**
 
     # **END OF CODE BLOCK**
 

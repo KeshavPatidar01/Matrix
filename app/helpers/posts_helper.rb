@@ -9,7 +9,7 @@ module PostsHelper
     match[1] if match
   end
 
-# app/helpers/posts_helper.rb
+  # app/helpers/posts_helper.rb
 
 
   def youtube_thumbnail(youtube_url, quality = :high)
@@ -19,13 +19,13 @@ module PostsHelper
     # Alag-alag YouTube URL formats se Video ID nikalne ki koshish
     video_id = if youtube_url.include?("watch?v=")
                  youtube_url.match(/v=([^&]+)/)[1]
-               elsif youtube_url.include?("youtu.be/")
+    elsif youtube_url.include?("youtu.be/")
                  youtube_url.split("/").last.split("?").first
-               elsif youtube_url.include?("/embed/")
+    elsif youtube_url.include?("/embed/")
                  youtube_url.split("/embed/").last.split("?").first
-               elsif youtube_url.include?("/shorts/")
+    elsif youtube_url.include?("/shorts/")
                  youtube_url.split("/shorts/").last.split("?").first
-               end
+    end
 
     # Agar video ID nahi mili, to default image return karein
     return "https://via.placeholder.com/480x360.png?text=Invalid+URL" unless video_id
@@ -58,7 +58,7 @@ module PostsHelper
       # Agar format ajeeb hai to URL waisa hi rakhein
       return youtube_url
     end
-    
+
     # Sahi embed URL banakar wapas bhejna
     "https://www.youtube.com/embed/#{video_id}"
   end

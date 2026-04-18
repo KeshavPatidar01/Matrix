@@ -29,7 +29,7 @@ group :development do
   gem "hotwire-livereload"
 end
 # Gemfile
-gem 'friendly_id'
+gem "friendly_id"
 
 # Optional: Agar aapki database PostgreSQL hai to 'groupdate' se grouping easy ho jaati hai
 # gem 'groupdate'
@@ -89,5 +89,5 @@ gem "hotwire-rails"
 
 gem "matrix", "~> 0.4.3"
 gem "langchainrb", "~> 0.19.5"
-gem 'ollama-ai'
+gem "ollama-ai"
 gem "neighbor", "~> 0.6.0"

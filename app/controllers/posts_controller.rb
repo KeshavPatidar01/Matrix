@@ -1,10 +1,10 @@
-require 'httparty'
-require 'json'
+require "httparty"
+require "json"
 
 class PostsController < ApplicationController
 before_action :set_topic, only: %i[new create send_code]
 before_action :set_post, only: %i[show edit update destroy send_code]
-  GEMINI_API_KEY = ENV['GEMINI_API_KEY']
+  GEMINI_API_KEY = ENV["GEMINI_API_KEY"]
 
   before_action :set_topic, only: %i[new show send_code]
   before_action :set_post, only: %i[show edit update destroy send_code]
@@ -14,7 +14,7 @@ before_action :set_post, only: %i[show edit update destroy send_code]
     @posts = Post.all
   end
 
- 
+
   def show
   @topic = @post.topic
 
@@ -58,12 +58,12 @@ end
 
   def send_code
     user_prompt = params[:prompt]
-    
+
     # Question aur Answer dono context mein bhej rahe hain
     post_context = "Problem: #{@post.post_title}\nSolution/Description: #{@post.post_description}"
 
     # Hard Prompt: Rules for the AI (Mentor Style)
-    hard_prompt = "You are a DSA Mentor. 
+    hard_prompt = "You are a DSA Mentor.
     Rule 1: Agar user galat DSA logic ya code likhe, toh use FULL ANSWER mat dena. Sirf approach aur way (rasta) samjhana.
     Rule 2: Agar user sahi solution likhe, toh hamesha satisfaction emoji (😊, ✅, 🔥) ke saath reply karna.
     Rule 3: Hinglish mein baat karna."
@@ -73,9 +73,9 @@ end
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=#{GEMINI_API_KEY}",
       headers: { "Content-Type" => "application/json" },
       body: {
-        contents: [{
-          parts: [{ text: "#{hard_prompt}\n\nContext:\n#{post_context}\n\nUser Question:\n#{user_prompt}" }]
-        }]
+        contents: [ {
+          parts: [ { text: "#{hard_prompt}\n\nContext:\n#{post_context}\n\nUser Question:\n#{user_prompt}" } ]
+        } ]
       }.to_json
     )
 
