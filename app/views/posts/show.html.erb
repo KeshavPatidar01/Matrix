@@ -1,0 +1,179 @@
+<% content_for :title, "Showing post" %>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-palenight.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/markdown/markdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closetag.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/selection/active-line.min.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+  .matrix-theme-wrapper {
+    font-family: 'VT323', monospace;
+    min-height: 80vh;
+    background-color: #000;
+    color: #4ade80;
+  }
+
+  .matrix-bg-css {
+    background-image: 
+      linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+  }
+
+  @keyframes matrix-fall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  .rain-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .rain-col {
+    position: absolute;
+    top: -20%;
+    color: #0f0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    opacity: 0.4;
+    user-select: none;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    text-shadow: 0 0 10px #0f0;
+    animation: matrix-fall linear infinite;
+    white-space: nowrap;
+  }
+
+  /* Randomize Rain Columns */
+  .rain-col:nth-child(1) { left: 5%;  animation-duration: 6s; animation-delay: -2s; }
+  .rain-col:nth-child(2) { left: 15%; animation-duration: 9s; animation-delay: -4s; }
+  .rain-col:nth-child(3) { left: 25%; animation-duration: 7s; animation-delay: -1s; }
+  .rain-col:nth-child(4) { left: 35%; animation-duration: 10s;animation-delay: -6s; }
+  .rain-col:nth-child(5) { left: 45%; animation-duration: 5s; animation-delay: -3s; }
+  .rain-col:nth-child(6) { left: 55%; animation-duration: 8s; animation-delay: -5s; }
+  .rain-col:nth-child(7) { left: 65%; animation-duration: 6s; animation-delay: -2s; }
+  .rain-col:nth-child(8) { left: 75%; animation-duration: 11s;animation-delay: -7s; }
+  .rain-col:nth-child(9) { left: 85%; animation-duration: 7s; animation-delay: -1s; }
+  .rain-col:nth-child(10){ left: 95%; animation-duration: 9s; animation-delay: -4s; }
+
+  /* --- 4. UTILITIES --- */
+  .matrix-text-glow { text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; }
+  .matrix-box-glow { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+  .matrix-border { border: 1px solid #00ff00; }
+
+  /* --- 5. EDITOR OVERRIDES (TERMINAL STYLE) --- */
+  #codemirror-editor {
+    width: 80%;
+    height: 400px;
+    background: #050505; /* Very dark grey, almost black */
+    color: #00ff00;      /* Matrix Green text */
+    padding: 14px 18px;
+    border-radius: 6px;
+    border: 1px solid #004400; /* Dark green border */
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+    
+    outline: none;
+  
+    font-family: 'VT323', monospace;
+    font-size: 18px; /* Slightly larger for pixel font */
+    white-space: pre;
+    overflow: auto;
+  }
+
+  /* Cursor glow */
+  #codemirror-editor:focus {
+    border-color: #00ff00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+  }
+
+  /* Selection color */
+  #codemirror-editor::selection {
+    background: #003300;
+    color: #fff;
+  }
+
+  /* --- 6. POST CONTENT STYLING --- */
+  /* Ensures rendered content follows theme */
+  .matrix-content h1, .matrix-content h2, .matrix-content h3 {
+    color: #fff;
+    text-shadow: 0 0 5px #0f0;
+    margin-bottom: 1rem;
+  }
+  .matrix-content p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  /* Code blocks inside the post */
+  .matrix-content pre {
+    background: #111;
+    border: 1px solid #00ff00;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #0f0;
+  }
+</style>
+
+<div class="matrix-theme-wrapper matrix-bg-css w-full overflow-x-hidden relative">
+
+  <div class="rain-container">
+      <div class="rain-col">1 0 1 A 4 F 2 0 9 1</div>
+      <div class="rain-col">0 1 0 1 B 7 3 A 0 1</div>
+      <div class="rain-col">A F 0 9 1 0 2 2 5 F</div>
+      <div class="rain-col">1 0 1 0 4 2 0 1 0 0</div>
+      <div class="rain-col">0 1 E 4 1 A 0 9 2 1</div>
+      <div class="rain-col">1 0 1 0 4 2 0 1 0 3</div>
+      <div class="rain-col">3 4 5 1 0 1 0 A B F</div>
+      <div class="rain-col">1 0 1 0 4 2 0 1 0 1</div>
+      <div class="rain-col">F F 0 1 A 9 1 0 2 0</div>
+      <div class="rain-col">1 0 1 0 4 2 0 1 0 1</div>
+  </div>
+
+  <div class="container mx-auto max-w-4xl px-4 py-8 relative z-10">
+
+    <% if notice.present? %>
+      <div class="py-3 px-4 bg-green-900 bg-opacity-30 border border-green-500 text-green-400 font-bold rounded-md inline-block mb-8 shadow-[0_0_10px_#0f0]" id="notice">
+        > <%= notice %>
+      </div>
+    <% end %>
+
+    <div class="border-b border-green-900 pb-4 mb-8">
+      <h1 class="font-bold text-5xl md:text-6xl text-white matrix-text-glow tracking-widest uppercase">
+        > Post Details <span class="animate-pulse">_</span>
+      </h1>
+    </div>
+
+    <%# --- Render Post Content Wrapper --- %>
+    <div class="matrix-content bg-gray-900 bg-opacity-80 p-6 rounded-xl matrix-border matrix-box-glow">
+        <%= render @post %> 
+    </div>
+    <%# ----------------------------------- %>
+
+    <div class="mt-8 flex gap-4">
+        <%= link_to "< BACK", :back, class: "text-green-500 hover:text-white underline decoration-green-500 font-bold text-xl transition-all" %>
+        <% if @next_post %>
+        <%= link_to "Next Post", post_path(@next_post) %>
+        <%end%>
+        <% if user_signed_in? && current_user.email == Rails.application.credentials.admin.email %>
+          <%= link_to "[ EDIT POST ]", edit_post_path(@post), class: "text-green-500 hover:text-white border border-green-500 px-4 py-1 hover:bg-green-700 transition-all ml-auto" %>
+        <% end %>
+    </div>
+
+  </div>
+
+  
+
+</div>

@@ -1,0 +1,175 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+    /* --- 1. GLOBAL FONTS & COLORS --- */
+    .matrix-theme-wrapper {
+    font-family: 'VT323', monospace;
+    min-height: 100vh;
+    background-color: #000;
+    }
+
+    /* --- 2. CSS-ONLY MATRIX BACKGROUND --- */
+    .matrix-bg-css {
+    background-image:
+    linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+    }
+
+    /* --- 3. RAIN ANIMATION (CSS ONLY) --- */
+    @keyframes matrix-fall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+    }
+
+    .rain-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+    }
+
+    .rain-col {
+    position: absolute;
+    top: -20%;
+    color: #0f0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    opacity: 0.3;
+    user-select: none;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    text-shadow: 0 0 10px #0f0;
+    animation: matrix-fall linear infinite;
+    white-space: nowrap;
+    }
+
+    /* Randomize Rain Columns */
+    .rain-col:nth-child(1) { left: 5%;  animation-duration: 6s; animation-delay: -2s; }
+    .rain-col:nth-child(2) { left: 15%; animation-duration: 9s; animation-delay: -4s; }
+    .rain-col:nth-child(3) { left: 25%; animation-duration: 7s; animation-delay: -1s; }
+    .rain-col:nth-child(4) { left: 35%; animation-duration: 10s;animation-delay: -6s; }
+    .rain-col:nth-child(5) { left: 45%; animation-duration: 5s; animation-delay: -3s; }
+    .rain-col:nth-child(6) { left: 55%; animation-duration: 8s; animation-delay: -5s; }
+    .rain-col:nth-child(7) { left: 65%; animation-duration: 6s; animation-delay: -2s; }
+    .rain-col:nth-child(8) { left: 75%; animation-duration: 11s;animation-delay: -7s; }
+    .rain-col:nth-child(9) { left: 85%; animation-duration: 7s; animation-delay: -1s; }
+    .rain-col:nth-child(10){ left: 95%; animation-duration: 9s; animation-delay: -4s; }
+
+    /* --- 4. UTILITIES --- */
+    .matrix-text-glow { text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; }
+    .matrix-box-glow { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+    .matrix-border { border: 1px solid #00ff00; }
+
+    /* --- 5. MOBILE CODE WRAPPING (Your Request) --- */
+    .matrix-prose pre {
+    background-color: #050505 !important;
+    border: 1px solid #003300;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-x: hidden !important;
+    color: #00ff00 !important;
+    }
+    .matrix-prose code {
+    color: #00ff00 !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    }
+    /* Override default prose colors for Matrix */
+    .matrix-prose p, .matrix-prose li, .matrix-prose strong {
+    color: #4ade80 !important; /* Tailwind green-400 */
+    }
+</style>
+
+<div class="matrix-theme-wrapper matrix-bg-css w-full overflow-x-hidden relative">
+
+  <div class="rain-container">
+    <div class="rain-col">1 0 1 A 4 F 2 0 9 1</div>
+    <div class="rain-col">0 1 0 1 B 7 3 A 0 1</div>
+    <div class="rain-col">A F 0 9 1 0 2 2 5 F</div>
+    <div class="rain-col">1 0 1 0 4 2 0 1 0 0</div>
+    <div class="rain-col">0 1 E 4 1 A 0 9 2 1</div>
+    <div class="rain-col">1 0 1 0 4 2 0 1 0 3</div>
+    <div class="rain-col">3 4 5 1 0 1 0 A B F</div>
+    <div class="rain-col">1 0 1 0 4 2 0 1 0 1</div>
+    <div class="rain-col">F F 0 1 A 9 1 0 2 0</div>
+    <div class="rain-col">1 0 1 0 4 2 0 1 0 1</div>
+  </div>
+
+  <div class="container mx-auto max-w-4xl px-4 py-8 relative z-10">
+
+    <%# Page Header %>
+    <div class="flex flex-col mb-8 gap-4">
+
+      <%# Topic Title %>
+      <div class="w-full min-w-0">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white matrix-text-glow w-full break-words hyphens-auto uppercase tracking-wider">
+          <%= @topic.title %>
+          <span class="animate-pulse">_</span>
+        </h1>
+      </div>
+
+      <%# Description %>
+      <div class="w-full min-w-0">
+        <div class="mt-2 text-green-400 text-lg md:text-xl font-mono prose matrix-prose max-w-none w-full break-words overflow-hidden opacity-90">
+          <%= @topic.description %>
+        </div>
+      </div>
+
+      <%# Admin Actions %>
+      <div class="flex gap-4 items-center mt-4">
+        <% if user_signed_in? && current_user.email == Rails.application.credentials.admin.email %>
+          <%= link_to "[ CREATE NEW DATA PACKET ]", new_topic_post_path(@topic),
+              class: "inline-block bg-black border border-green-500 text-green-500 font-bold py-2 px-6 hover:bg-green-700 hover:text-black hover:shadow-[0_0_15px_#0f0] transition-all duration-300" %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <%# --- START: New Dynamic Button for First Post --- %>
+    <% if @posts.any? %>
+      <div class="mb-8 p-6 bg-gray-900 matrix-border matrix-box-glow flex flex-col md:flex-row items-center justify-between gap-4">
+        <span class="text-green-300 font-bold text-xl tracking-wide">
+            > SYSTEM READY. INITIATE SEQUENCE?
+        </span>
+        <%# We link to the first post of the current topic %>
+        <%= link_to "START SIMULATION", topic_post_path(@topic, @posts.first), data: { turbo: false }, class: "px-8 py-3 text-lg font-bold bg-green-700 text-black border border-green-500 hover:bg-white hover:text-black hover:shadow-[0_0_20px_#0f0] transition-all duration-200 transform hover:scale-105" %>
+        </div>
+      <% end %>
+      <%# --- END: New Dynamic Button for First Post --- %>
+
+      <%# Card to contain the list of posts %>
+      <div class="bg-gray-900 matrix-border matrix-box-glow overflow-hidden">
+        <ul class="divide-y divide-green-900">
+
+          <%# Check if posts exist, otherwise show empty state %>
+          <%# if @posts.any? %>
+          <%# @posts.each_with_index do |post, index| %>
+          <!--                      <li class="hover:bg-gray-800 transition-colors duration-150">-->
+          <%# = link_to topic_post_path(@topic, post), class: "block p-6 flex items-center justify-between group", data: { turbo: false } do %>
+          <!--                              <div class="flex items-center gap-4">
+          <span class="text-green-600 font-mono text-sm">[          <%# = index + 1 %>          ]</span>
+
+        </div>
+        <span class="text-green-700 group-hover:text-green-400">></span>        <%# end %>        -->
+        <!--                      </li>-->
+        <%# end %>
+        <%# else %>
+        <!--                  <li class="p-8 text-center text-green-700 font-mono">
+          [ NO DATA FOUND IN SECTOR ]
+      </li>      <%# end %>      -->
+
+    </ul>
+  </div>
+
+</div>
+</div>
+
+<script>
+  document.addEventListener("turbo:load", () => {
+  console.log("Matrix Topic Page JS loaded");
+  });
+
+</script>

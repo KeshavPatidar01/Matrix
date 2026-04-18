@@ -1,0 +1,129 @@
+<style>
+  .matrix-bg {
+    background-color: #000000;
+    /* This gradient creates the vertical lines effect */
+    background-image: linear-gradient(0deg, transparent 24%, rgba(0, 255, 65, .3) 25%, rgba(0, 255, 65, .3) 26%, transparent 27%, transparent 74%, rgba(0, 255, 65, .3) 75%, rgba(0, 255, 65, .3) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 255, 65, .3) 25%, rgba(0, 255, 65, .3) 26%, transparent 27%, transparent 74%, rgba(0, 255, 65, .3) 75%, rgba(0, 255, 65, .3) 76%, transparent 77%, transparent);
+    background-size: 50px 50px;
+    animation: matrix-fall 4s linear infinite;
+  }
+
+  @keyframes matrix-fall {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 0 1000px, 0 1000px; }
+  }
+
+  /* Text Glow Helper */
+  .text-glow {
+    text-shadow: 0 0 5px rgba(0, 255, 65, 0.7);
+  }
+  
+  /* Card Glow on Hover */
+  .card-glow:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4), inset 0 0 10px rgba(0, 255, 65, 0.1);
+  }
+</style>
+
+<div class="min-h-screen matrix-bg font-mono text-[#00ff41]">
+  
+  <div class="container mx-auto px-4 md:px-8 py-16 relative z-10">
+
+    <% if user_signed_in? && current_user.email == Rails.application.credentials.admin.email %>
+      <div class="flex justify-center mb-8">
+        <%= link_to new_topic_path, class: "group relative px-6 py-3 font-bold text-black bg-[#00ff41] hover:bg-white transition-colors duration-300 clip-path-polygon" do %>
+          <span class="absolute inset-0 w-full h-full border-2 border-[#00ff41]"></span>
+          [ + INITIALIZE NEW CONSTRUCT ]
+        <% end %>
+      </div>
+    <% end %>
+
+    <h1 class="text-3xl md:text-5xl font-extrabold text-center mb-16 tracking-widest uppercase text-glow border-b border-green-900 pb-4 mx-auto max-w-2xl">
+      > Explore_Constructs
+    </h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+      
+      <%# --- Sorting Logic (Preserved) --- %>
+      <% sorted_topics = @topics.sort_by do |topic|
+           day_match = topic.title.match(/Day\s(\d+)/)
+           day_match ? day_match[1].to_i : 9999 
+         end %>
+
+      <% sorted_topics.each_with_index do |topic, index| %>
+
+        <%# --- Completion Logic (Preserved) --- %>
+        <% previous_completed = true %>
+        <% if index > 0 %>
+          <% prev_topic = sorted_topics[index - 1] %>
+          <% previous_completed = current_user.user_topic_progresses
+                                      .find_by(topic_id: prev_topic.id, completed: true)
+                                      .present? %>
+        <% end %>
+        
+        <%# --- Access Check --- %>
+        <% is_unlocked = previous_completed || current_user.email == "keshavpatidar9876@gmail.com" %>
+
+        <div class="group relative bg-black/90 rounded-none border border-green-900 p-8 md:p-10 overflow-hidden
+                    transition-all duration-500 ease-in-out transform 
+                    <%= is_unlocked ? 'hover:-translate-y-2 card-glow border-[#00ff41]' : 'opacity-60 grayscale border-gray-800 cursor-not-allowed' %>">
+
+          <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-[#00ff41]"></div>
+          <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-[#00ff41]"></div>
+          <div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[#00ff41]"></div>
+          <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[#00ff41]"></div>
+
+          <div class="absolute top-4 right-4 font-bold text-xs">
+            <% if is_unlocked %>
+               <span class="text-[#00ff41] animate-pulse">[ ACCESS_GRANTED ]</span>
+            <% else %>
+               <span class="text-red-600">[ ENCRYPTED ]</span>
+            <% end %>
+          </div>
+
+          <div class="mt-4">
+            <div class="mb-4 inline-block">
+              <% if is_unlocked %>
+                <%= link_to topic_path(topic), class: "block transition-all duration-300 group-hover:text-white" do %>
+                  <h2 class="text-xl md:text-2xl font-bold px-4 py-2 border border-[#00ff41] text-[#00ff41] bg-green-900/20 hover:bg-[#00ff41] hover:text-black transition-colors duration-300">
+                    <%= topic.title %>
+                  </h2>
+                <% end %>
+              <% else %>
+                <h2 class="text-xl md:text-2xl font-bold px-4 py-2 border border-gray-700 text-gray-500 bg-gray-900 cursor-not-allowed">
+                  <%= topic.title %>
+                </h2>
+              <% end %>
+            </div>
+
+            <% if is_unlocked %>
+              <div class="text-green-600/80 mt-5 text-sm md:text-base leading-relaxed border-l-2 border-green-900 pl-4">
+                <p class="font-mono">
+                  > <%= truncate(strip_tags(topic.description), length: 150) %>
+                  <span class="animate-pulse">_</span>
+                </p>
+              </div>
+              
+              <div class="mt-6 flex items-center text-xs uppercase tracking-widest text-[#00ff41] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                 <span>Run Program</span>
+                 <span class="ml-2">>></span>
+              </div>
+            <% else %>
+               <div class="mt-5 text-red-900/50 text-sm border-l-2 border-red-900/30 pl-4">
+                  <p>> DATA CORRUPTED.</p>
+                  <p>> COMPLETE PREVIOUS LEVEL TO DECRYPT.</p>
+               </div>
+            <% end %>
+          </div>
+
+        </div>
+        <% end %>
+
+      <%# Fill empty space %>
+      <% remaining = 3 - (@topics.size % 3) %>
+      <% if remaining < 3 %>
+        <% remaining.times do %>
+          <div class="invisible"></div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

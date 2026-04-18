@@ -1,0 +1,650 @@
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ultimate DSA Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Scoped Container - Rails Navbar Safe */
+        .dsa-roadmap-wrapper {
+            /* Adjust this height based on your Rails Navbar height (e.g., calc(100vh - 60px)) */
+            height: calc(100vh - 60px); 
+            width: 100%;
+            background-color: #0f172a;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; /* Only hide overflow inside this container */
+            position: relative;
+            border-top: 1px solid #334155;
+        }
+
+        /* --- CANVAS & CONTAINER --- */
+        #viewport {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            cursor: grab;
+            position: relative;
+            touch-action: none;
+        }
+
+        #map-container {
+            position: absolute;
+            top: 0; left: 0;
+            transform-origin: 0 0;
+            width: 1400px;
+            height: 1600px;
+        }
+
+        /* --- NODES --- */
+        .node {
+            position: absolute;
+            background: #1e293b;
+            padding: 12px 20px;
+            border-radius: 999px;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 140px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            user-select: none;
+        }
+
+        .node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.6);
+            border-color: #60a5fa;
+            z-index: 20;
+            background: #0f172a;
+        }
+
+        /* Difficulty Colors/Glows */
+        .glow-blue { box-shadow: 0 0 10px rgba(59, 130, 246, 0.1); }
+        .glow-green { box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
+        .glow-purple { box-shadow: 0 0 10px rgba(168, 85, 247, 0.1); }
+        .glow-red { box-shadow: 0 0 10px rgba(244, 63, 94, 0.1); }
+        .glow-orange { box-shadow: 0 0 10px rgba(249, 115, 22, 0.1); }
+
+        /* --- SVG LINES --- */
+        .dsa-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .dsa-path {
+            fill: none;
+            stroke: #475569;
+            stroke-width: 2px;
+            stroke-linecap: round;
+            transition: stroke 0.3s;
+        }
+
+        /* --- INTERNAL UI ELEMENTS (Scoped absolute, not fixed) --- */
+        .dsa-header {
+            position: absolute; /* Changed from fixed to absolute */
+            top: 20px; left: 20px;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .dsa-controls {
+            position: absolute; /* Changed from fixed to absolute */
+            bottom: 20px; right: 20px;
+            display: flex; gap: 10px; z-index: 30;
+        }
+
+        .btn-ctrl {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: #1e293b; border: 1px solid #475569;
+            color: white; font-size: 18px; cursor: pointer;
+            display: grid; place-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+        .btn-ctrl:active { transform: scale(0.95); }
+        .btn-ctrl:hover { background: #334155; }
+
+        /* --- MODAL --- */
+        .dsa-modal {
+            position: absolute; /* Changed from fixed */
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            backdrop-filter: blur(2px);
+        }
+        .dsa-modal.active { opacity: 1; pointer-events: auto; }
+        
+        .dsa-modal-content {
+            background: #1e293b;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80%;
+            border: 1px solid #475569;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .dsa-modal.active .dsa-modal-content { transform: scale(1); }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #334155;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #0f172a;
+        }
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .question-list li {
+            padding: 8px 12px;
+            border-bottom: 1px solid #334155;
+            color: #cbd5e1;
+            font-size: 14px;
+            display: flex; align-items: center; gap: 10px;
+            transition: background 0.2s;
+            cursor: default;
+        }
+        .question-list li:hover { background: #334155; color: white; }
+        .question-list li:last-child { border-bottom: none; }
+        .q-num { color: #64748b; font-size: 0.8em; min-width: 25px; }
+
+    </style>
+
+<body>
+
+    <!-- Main Wrapper - Put this inside your Rails view container -->
+    <div class="dsa-roadmap-wrapper">
+
+        <!-- Header Info (Absolute inside wrapper) -->
+        <div class="dsa-header">
+            <h1 class="text-2xl font-bold text-blue-400 drop-shadow-md">DSA Roadmap</h1>
+            
+        </div>
+
+        <!-- Viewport -->
+        <div id="viewport">
+            <div id="map-container">
+                <!-- SVG Layer -->
+                <svg id="connections" class="dsa-svg">
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#475569" />
+                        </marker>
+                    </defs>
+                </svg>
+
+                <!-- NODES -->
+                <!-- Use data-key to reference questions in JS -->
+                
+                <div id="arrays" class="node glow-blue" style="top: 50px; left: 600px;" data-key="arrays" onclick="handleNodeClick(this)">
+                    <i class="fas fa-th"></i> Arrays & Hashing
+                </div>
+
+                <div id="two-ptr" class="node glow-green" style="top: 180px; left: 350px;" data-key="two_ptr" onclick="handleNodeClick(this)">
+                    <i class="fas fa-hand-pointer"></i> Two Pointers
+                </div>
+                <div id="stack" class="node glow-green" style="top: 180px; left: 850px;" data-key="stack" onclick="handleNodeClick(this)">
+                    <i class="fas fa-layer-group"></i> Stack
+                </div>
+
+                <div id="binary-search" class="node glow-green" style="top: 320px; left: 150px;" data-key="binary_search" onclick="handleNodeClick(this)">
+                    <i class="fas fa-search"></i> Binary Search
+                </div>
+                <div id="sliding" class="node glow-green" style="top: 320px; left: 400px;" data-key="sliding_window" onclick="handleNodeClick(this)">
+                    <i class="fas fa-window-maximize"></i> Sliding Window
+                </div>
+                
+                <div id="recursion" class="node glow-orange" style="top: 320px; left: 700px;" data-key="recursion" onclick="handleNodeClick(this)">
+                    <i class="fas fa-recycle"></i> Recursion
+                </div>
+
+                <div id="ll" class="node glow-green" style="top: 320px; left: 1000px;" data-key="linked_list" onclick="handleNodeClick(this)">
+                    <i class="fas fa-link"></i> Linked List
+                </div>
+
+                <div id="trees" class="node glow-purple" style="top: 480px; left: 600px;" data-key="trees" onclick="handleNodeClick(this)">
+                    <i class="fas fa-tree"></i> Trees
+                </div>
+
+                <div id="tries" class="node glow-purple" style="top: 620px; left: 400px;" data-key="tries" onclick="handleNodeClick(this)">
+                    <i class="fas fa-network-wired"></i> Tries
+                </div>
+                <div id="backtracking" class="node glow-purple" style="top: 620px; left: 800px;" data-key="backtracking" onclick="handleNodeClick(this)">
+                    <i class="fas fa-undo"></i> Backtracking
+                </div>
+
+                <div id="heap" class="node glow-purple" style="top: 760px; left: 300px;" data-key="heap" onclick="handleNodeClick(this)">
+                    <i class="fas fa-cubes"></i> Heap / PQ
+                </div>
+                <div id="graphs" class="node glow-red" style="top: 760px; left: 600px;" data-key="graphs" onclick="handleNodeClick(this)">
+                    <i class="fas fa-project-diagram"></i> Graphs
+                </div>
+                <div id="dp1" class="node glow-red" style="top: 760px; left: 900px;" data-key="dp_1d" onclick="handleNodeClick(this)">
+                    <i class="fas fa-stairs"></i> 1-D DP
+                </div>
+
+                <div id="intervals" class="node glow-purple" style="top: 900px; left: 150px;" data-key="intervals" onclick="handleNodeClick(this)">
+                    <i class="fas fa-clock"></i> Intervals
+                </div>
+                <div id="greedy" class="node glow-purple" style="top: 900px; left: 400px;" data-key="greedy" onclick="handleNodeClick(this)">
+                    <i class="fas fa-cookie-bite"></i> Greedy
+                </div>
+                <div id="adv-graphs" class="node glow-red" style="top: 900px; left: 650px;" data-key="adv_graphs" onclick="handleNodeClick(this)">
+                    <i class="fas fa-biohazard"></i> Adv. Graphs
+                </div>
+                <div id="dp2" class="node glow-red" style="top: 900px; left: 900px;" data-key="dp_2d" onclick="handleNodeClick(this)">
+                    <i class="fas fa-table"></i> 2-D DP
+                </div>
+                <div id="bits" class="node glow-red" style="top: 900px; left: 1150px;" data-key="bit_manip" onclick="handleNodeClick(this)">
+                    <i class="fas fa-microchip"></i> Bit Manip.
+                </div>
+
+                <div id="math" class="node glow-red" style="top: 1050px; left: 650px;" data-key="math_geo" onclick="handleNodeClick(this)">
+                    <i class="fas fa-calculator"></i> Math & Geo
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls (Absolute inside wrapper) -->
+        <div class="dsa-controls pb-20">
+            <button class="btn-ctrl" onclick="zoomIn()"><i class="fas fa-plus"></i></button>
+            <button class="btn-ctrl" onclick="resetView()"><i class="fas fa-compress"></i></button>
+            <button class="btn-ctrl" onclick="zoomOut()"><i class="fas fa-minus"></i></button>
+        </div>
+
+        <!-- Details Modal (Scoped absolute) -->
+        <div id="dsa-modal" class="dsa-modal" onclick="closeModal(event)">
+            <div class="dsa-modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title" class="text-xl font-bold text-blue-400">Topic</h2>
+                    <button onclick="document.getElementById('dsa-modal').classList.remove('active')" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul id="modal-list" class="question-list">
+                        <!-- Items will be injected here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+    // use this becuase sometimes all pages ocntent not render without refresh.
+document.addEventListener("turbo:load", () => {
+  console.log("Landing page JS loaded");
+  
+});
+        // --- DATA: 18+ Questions per Topic ---
+        const topicsData = {
+            arrays: {
+                title: "Arrays & Hashing",
+                questions: [
+                    "Contains Duplicate", "Valid Anagram", "Two Sum", "Group Anagrams", 
+                    "Top K Frequent Elements", "Product of Array Except Self", "Valid Sudoku", 
+                    "Encode and Decode Strings", "Longest Consecutive Sequence", "Find Pivot Index",
+                    "Majority Element", "Is Subsequence", "Replace Elements with Greatest on Right",
+                    "Pascal's Triangle", "Remove Element", "Unique Email Addresses",
+                    "Isomorphic Strings", "Can Place Flowers", "Next Greater Element I", "Design HashMap"
+                ]
+            },
+            two_ptr: {
+                title: "Two Pointers",
+                questions: [
+                    "Valid Palindrome", "Two Sum II - Input Array Sorted", "3Sum", "Container With Most Water",
+                    "Trapping Rain Water", "Move Zeroes", "Remove Duplicates from Sorted Array",
+                    "Squares of a Sorted Array", "Rotate Array", "Reverse String", "Valid Palindrome II",
+                    "Boats to Save People", "Minimize Maximum Pair Sum in Array", "Sort Colors",
+                    "4Sum", "Number of Subsequences That Satisfy the Given Sum", "Merge Strings Alternately",
+                    "Reverse Vowels of a String", "Partition Labels"
+                ]
+            },
+            stack: {
+                title: "Stack",
+                questions: [
+                    "Valid Parentheses", "Min Stack", "Evaluate Reverse Polish Notation", "Generate Parentheses",
+                    "Daily Temperatures", "Car Fleet", "Largest Rectangle in Histogram", "Baseball Game",
+                    "Implement Stack using Queues", "Remove All Adjacent Duplicates In String",
+                    "Online Stock Span", "Asteroid Collision", "Simplify Path", "Decode String",
+                    "Remove K Digits", "132 Pattern", "Maximum Frequency Stack", "Flatten Nested List Iterator",
+                    "Verify Preorder Serialization of a Binary Tree"
+                ]
+            },
+            binary_search: {
+                title: "Binary Search",
+                questions: [
+                    "Binary Search", "Search a 2D Matrix", "Koko Eating Bananas", "Find Minimum in Rotated Sorted Array",
+                    "Search in Rotated Sorted Array", "Time Based Key-Value Store", "Median of Two Sorted Arrays",
+                    "Guess Number Higher or Lower", "First Bad Version", "Arranging Coins", "Search Insert Position",
+                    "Peak Index in a Mountain Array", "Find Peak Element", "Search in Rotated Sorted Array II",
+                    "Find First and Last Position of Element", "Single Element in a Sorted Array",
+                    "Capacity To Ship Packages Within D Days", "Split Array Largest Sum", "Kth Missing Positive Number"
+                ]
+            },
+            sliding_window: {
+                title: "Sliding Window",
+                questions: [
+                    "Best Time to Buy and Sell Stock", "Longest Substring Without Repeating Characters",
+                    "Longest Repeating Character Replacement", "Permutation in String", "Minimum Window Substring",
+                    "Sliding Window Maximum", "Contains Duplicate II", "Number of Sub-arrays of Size K and Average >= Threshold",
+                    "Max Consecutive Ones III", "Fruit Into Baskets", "Longest Subarray of 1's After Deleting One Element",
+                    "Minimum Size Subarray Sum", "Find All Anagrams in a String", "Maximum Average Subarray I",
+                    "Repeated DNA Sequences", "Frequency of the Most Frequent Element", "Subarray Product Less Than K",
+                    "Count Occurrences of Anagrams", "Maximum Points You Can Obtain from Cards"
+                ]
+            },
+            recursion: {
+                title: "Recursion",
+                questions: [
+                    "Fibonacci Number", "Climbing Stairs (Recursive)", "Pow(x, n)", "K-th Symbol in Grammar",
+                    "Tower of Hanoi", "Merge Sort (Concept)", "Quick Sort (Concept)", "Elimination Game",
+                    "Predict the Winner", "Different Ways to Add Parentheses", "Decode String (Recursive)",
+                    "Power of Three", "Power of Two", "Power of Four", "Reverse String (Recursive)",
+                    "Swap Nodes in Pairs", "Pascals Triangle II", "Find the Winner of the Circular Game",
+                    "All Possible Full Binary Trees"
+                ]
+            },
+            linked_list: {
+                title: "Linked List",
+                questions: [
+                    "Reverse Linked List", "Merge Two Sorted Lists", "Reorder List", "Remove Nth Node From End of List",
+                    "Copy List with Random Pointer", "Add Two Numbers", "Linked List Cycle", "Find the Duplicate Number",
+                    "LRU Cache", "Merge k Sorted Lists", "Reverse Nodes in k-Group", "Palindrome Linked List",
+                    "Intersection of Two Linked Lists", "Remove Linked List Elements", "Design Linked List",
+                    "Browser History Design", "Middle of the Linked List", "Odd Even Linked List",
+                    "Sort List", "Partition List"
+                ]
+            },
+            trees: {
+                title: "Trees",
+                questions: [
+                    "Invert Binary Tree", "Maximum Depth of Binary Tree", "Diameter of Binary Tree", "Balanced Binary Tree",
+                    "Same Tree", "Subtree of Another Tree", "Lowest Common Ancestor of a BST", "Binary Tree Level Order Traversal",
+                    "Binary Tree Right Side View", "Count Good Nodes in Binary Tree", "Validate Binary Search Tree",
+                    "Kth Smallest Element in a BST", "Construct Binary Tree from Preorder and Inorder",
+                    "Binary Tree Maximum Path Sum", "Serialize and Deserialize Binary Tree", "Symmetric Tree",
+                    "Path Sum", "Path Sum II", "Path Sum III", "Sum Root to Leaf Numbers"
+                ]
+            },
+            tries: {
+                title: "Tries",
+                questions: [
+                    "Implement Trie (Prefix Tree)", "Design Add and Search Words Data Structure", "Word Search II",
+                    "Replace Words", "Longest Word in Dictionary", "Camelcase Matching", "Map Sum Pairs",
+                    "Stream of Characters", "Search Suggestions System", "Palindrome Pairs",
+                    "Maximum XOR of Two Numbers in an Array", "Index Pairs of a String",
+                    "Design Search Autocomplete System", "Implement Magic Dictionary", "Bold Words in String",
+                    "Concatenated Words", "Prefix and Suffix Search", "Shortest Encoding of Words"
+                ]
+            },
+            backtracking: {
+                title: "Backtracking",
+                questions: [
+                    "Subsets", "Combination Sum", "Permutations", "Subsets II", "Combination Sum II",
+                    "Word Search", "Palindrome Partitioning", "Letter Combinations of a Phone Number",
+                    "N-Queens", "Sudoku Solver", "Combinations", "Permutations II", "Restore IP Addresses",
+                    "Matchsticks to Square", "Splitting a String Into Descending Consecutive Values",
+                    "Find Unique Binary String", "Partition to K Equal Sum Subsets", "Beautiful Arrangement",
+                    "Maximum Length of a Concatenated String with Unique Characters"
+                ]
+            },
+            heap: {
+                title: "Heap / Priority Queue",
+                questions: [
+                    "Kth Largest Element in a Stream", "Last Stone Weight", "K Closest Points to Origin",
+                    "Kth Largest Element in an Array", "Task Scheduler", "Design Twitter", "Find Median from Stream",
+                    "Merge k Sorted Lists", "Relative Ranks", "Maximum Product of Two Elements in an Array",
+                    "The K Weakest Rows in a Matrix", "Seat Reservation Manager", "Process Tasks Using Servers",
+                    "Find K Pairs with Smallest Sums", "Smallest Range Covering Elements from K Lists",
+                    "Reorganize String", "Furthest Building You Can Reach", "IPO", "Single-Threaded CPU"
+                ]
+            },
+            graphs: {
+                title: "Graphs",
+                questions: [
+                    "Number of Islands", "Max Area of Island", "Clone Graph", "Walls and Gates", "Rotting Oranges",
+                    "Pacific Atlantic Water Flow", "Surrounded Regions", "Course Schedule", "Course Schedule II",
+                    "Graph Valid Tree", "Number of Connected Components", "Redundant Connection",
+                    "Word Ladder", "Island Perimeter", "Verifying an Alien Dictionary", "Find the Town Judge",
+                    "Flood Fill", "01 Matrix", "Shortest Path in Binary Matrix", "Snakes and Ladders"
+                ]
+            },
+            dp_1d: {
+                title: "1-D Dynamic Programming",
+                questions: [
+                    "Climbing Stairs", "Min Cost Climbing Stairs", "House Robber", "House Robber II",
+                    "Longest Palindromic Substring", "Palindromic Substrings", "Decode Ways", "Coin Change",
+                    "Maximum Product Subarray", "Word Break", "Longest Increasing Subsequence",
+                    "Partition Equal Subset Sum", "Triangle", "Delete and Earn", "Solving Questions With Brainpower",
+                    "Domino and Tromino Tiling", "Best Time to Buy and Sell Stock w/ Cooldown",
+                    "Combination Sum IV", "Perfect Squares"
+                ]
+            },
+            intervals: {
+                title: "Intervals",
+                questions: [
+                    "Insert Interval", "Merge Intervals", "Non-overlapping Intervals", "Meeting Rooms",
+                    "Meeting Rooms II", "Minimum Number of Arrows to Burst Balloons", "Summary Ranges",
+                    "Teemo Attacking", "Interval List Intersections", "My Calendar I", "My Calendar II",
+                    "My Calendar III", "Data Stream as Disjoint Intervals", "Remove Covered Intervals",
+                    "Video Stitching", "Partition Labels", "Range Module", "Employee Free Time"
+                ]
+            },
+            greedy: {
+                title: "Greedy",
+                questions: [
+                    "Maximum Subarray", "Jump Game", "Jump Game II", "Gas Station", "Hand of Straights",
+                    "Merge Triplets to Form Target Triplet", "Partition Labels", "Valid Parenthesis String",
+                    "Assign Cookies", "Lemonade Change", "Array Partition I", "Can Place Flowers",
+                    "Minimum Number of Arrows to Burst Balloons", "Non-overlapping Intervals",
+                    "Two City Scheduling", "Maximum Length of Pair Chain", "Dota2 Senate",
+                    "Bag of Tokens", "Minimum Deletions to Make Character Frequencies Unique"
+                ]
+            },
+            adv_graphs: {
+                title: "Advanced Graphs",
+                questions: [
+                    "Reconstruct Itinerary", "Min Cost to Connect All Points", "Network Delay Time",
+                    "Cheapest Flights Within K Stops", "Swim in Rising Water", "Alien Dictionary",
+                    "Cheapest Flights Within K Stops", "Path With Minimum Effort", "Find Itinerary",
+                    "Optimize Water Distribution in a Village", "Find Critical and Pseudo-Critical Edges",
+                    "Checking Existence of Edge Length Limited Paths", "Minimize Hamming Distance After Swap Operations",
+                    "Sequence Reconstruction", "Parallel Courses", "Critical Connections in a Network",
+                    "Remove Max Number of Edges to Keep Graph Fully Traversable", "Most Stones Removed with Same Row or Column"
+                ]
+            },
+            dp_2d: {
+                title: "2-D Dynamic Programming",
+                questions: [
+                    "Unique Paths", "Longest Common Subsequence", "Best Time to Buy and Sell Stock with Cooldown",
+                    "Coin Change II", "Target Sum", "Interleaving String", "Longest Increasing Path in a Matrix",
+                    "Distinct Subsequences", "Edit Distance", "Burst Balloons", "Regular Expression Matching",
+                    "Unique Paths II", "Minimum Path Sum", "Dungeon Game", "Maximal Square",
+                    "Cherry Pickup", "Student Attendance Record II", "Russian Doll Envelopes", "Paint House"
+                ]
+            },
+            bit_manip: {
+                title: "Bit Manipulation",
+                questions: [
+                    "Single Number", "Number of 1 Bits", "Counting Bits", "Reverse Bits", "Missing Number",
+                    "Sum of Two Integers", "Reverse Integer", "Power of Two", "Single Number II", "Single Number III",
+                    "Bitwise AND of Numbers Range", "Total Hamming Distance", "Hamming Distance",
+                    "Minimum Flips to Make a OR b Equal to c", "Maximum XOR of Two Numbers in an Array",
+                    "Find the Difference", "Complement of Base 10 Integer", "Binary Number with Alternating Bits"
+                ]
+            },
+            math_geo: {
+                title: "Math & Geometry",
+                questions: [
+                    "Rotate Image", "Spiral Matrix", "Set Matrix Zeroes", "Happy Number", "Plus One",
+                    "Pow(x, n)", "Multiply Strings", "Detect Squares", "Robot Bounded In Circle",
+                    "Spiral Matrix II", "Excel Sheet Column Title", "Excel Sheet Column Number",
+                    "Factorial Trailing Zeroes", "Sqrt(x)", "Divide Two Integers", "Fraction to Recurring Decimal",
+                    "Max Points on a Line", "Valid Square", "Rectangle Area", "Mirror Reflection"
+                ]
+            }
+        };
+
+        // --- DRAW LINES ---
+        const connections = [
+            ['arrays', 'two-ptr'], ['arrays', 'stack'], ['two-ptr', 'binary-search'],
+            ['two-ptr', 'sliding'], ['two-ptr', 'll'], ['stack', 'recursion'], 
+            ['recursion', 'trees'], ['recursion', 'backtracking'], ['trees', 'tries'],
+            ['trees', 'heap'], ['backtracking', 'graphs'], ['backtracking', 'dp1'],
+            ['heap', 'intervals'], ['heap', 'greedy'], ['graphs', 'adv-graphs'],
+            ['graphs', 'dp2'], ['graphs', 'math'], ['dp1', 'dp2'], ['dp1', 'bits'],
+            ['dp2', 'math'], ['bits', 'math']
+        ];
+
+        function drawLines() {
+            const svg = document.getElementById('connections');
+            // Select path inside dsa-roadmap-wrapper to avoid global query selector issues
+            const existingPaths = svg.querySelectorAll('path:not(defs path)');
+            existingPaths.forEach(p => p.remove());
+
+            const containerRect = document.getElementById('map-container').getBoundingClientRect();
+
+            connections.forEach(([startId, endId]) => {
+                const start = document.getElementById(startId);
+                const end = document.getElementById(endId);
+
+                if (!start || !end) return;
+
+                // Position relative to map-container
+                const startLeft = start.offsetLeft + start.offsetWidth / 2;
+                const startTop = start.offsetTop + start.offsetHeight;
+                const endLeft = end.offsetLeft + end.offsetWidth / 2;
+                const endTop = end.offsetTop;
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.classList.add('dsa-path');
+                
+                const midY = (startTop + endTop) / 2;
+                const d = `M ${startLeft} ${startTop} C ${startLeft} ${midY}, ${endLeft} ${midY}, ${endLeft} ${endTop}`;
+
+                path.setAttribute("d", d);
+                path.setAttribute("marker-end", "url(#arrow)");
+                svg.appendChild(path);
+            });
+        }
+
+        // --- PAN & ZOOM LOGIC ---
+        const viewport = document.getElementById('viewport');
+        const container = document.getElementById('map-container');
+        
+        let scale = 0.6; 
+        let pointX = (viewport.offsetWidth - 1400 * scale) / 2;
+        let pointY = 50;
+        let isDragging = false;
+        let startX, startY;
+
+        function updateTransform() {
+            container.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        }
+
+        viewport.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - pointX;
+            startY = e.clientY - pointY;
+            viewport.style.cursor = 'grabbing';
+        });
+
+        viewport.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            pointX = e.clientX - startX;
+            pointY = e.clientY - startY;
+            updateTransform();
+        });
+
+        viewport.addEventListener('mouseup', () => { isDragging = false; viewport.style.cursor = 'grab'; });
+        viewport.addEventListener('mouseleave', () => { isDragging = false; viewport.style.cursor = 'grab'; });
+
+        viewport.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX - pointX;
+            startY = e.touches[0].clientY - pointY;
+        }, {passive: false});
+
+        viewport.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault(); 
+            pointX = e.touches[0].clientX - startX;
+            pointY = e.touches[0].clientY - startY;
+            updateTransform();
+        }, {passive: false});
+
+        viewport.addEventListener('touchend', () => isDragging = false);
+
+        function zoomIn() { scale = Math.min(scale * 1.2, 2); updateTransform(); }
+        function zoomOut() { scale = Math.max(scale / 1.2, 0.3); updateTransform(); }
+        function resetView() {
+            scale = window.innerWidth < 768 ? 0.4 : 0.7;
+            pointX = (viewport.offsetWidth - 1400 * scale) / 2;
+            pointY = 50;
+            updateTransform();
+        }
+
+        // --- MODAL LOGIC ---
+        function handleNodeClick(element) {
+            const key = element.getAttribute('data-key');
+            if (topicsData[key]) {
+                openModal(topicsData[key].title, topicsData[key].questions);
+            }
+        }
+
+        function openModal(title, questions) {
+            document.getElementById('modal-title').innerText = title;
+            const list = document.getElementById('modal-list');
+            
+            // Generate list items with numbers
+            list.innerHTML = questions.map((q, index) => 
+                `<li>
+                    <span class="q-num">${index + 1}.</span>
+                    <span>${q}</span>
+                 </li>`
+            ).join('');
+            
+            document.getElementById('dsa-modal').classList.add('active');
+        }
+
+        function closeModal(e) {
+            if (e.target.id === 'dsa-modal') e.target.classList.remove('active');
+        }
+
+        window.onload = () => {
+            drawLines();
+            resetView();
+        };
+        window.onresize = resetView;
+    
+
+
+   
+    </script>
+</body>

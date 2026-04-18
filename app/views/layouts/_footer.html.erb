@@ -1,0 +1,102 @@
+<footer class="bg-black text-[#00FF41] py-16 relative overflow-hidden font-mono border-t border-[#00FF41]">
+  
+  <div class="absolute inset-0 pointer-events-none opacity-10" 
+       style="background-image: linear-gradient(#00FF41 1px, transparent 1px), linear-gradient(90deg, #00FF41 1px, transparent 1px); background-size: 20px 20px;">
+  </div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+      
+      <div class="scroll-animate">
+        <h3 class="text-2xl font-bold mb-4 uppercase tracking-widest text-shadow-glow">About System</h3>
+        <p class="text-[#00FF41]/80 leading-relaxed">
+       
+          <span class="font-bold">action:</span> initialized platform. <br>
+          <span class="font-bold">status:</span> making learning smarter, interactive, and AI-powered.
+        </p>
+      </div>
+      
+      <div class="hidden md:flex items-center justify-center opacity-50 scroll-animate">
+        <pre class="text-[10px] leading-3 text-[#003B00]">
+    0101010101
+    1010101010
+    0011001100
+        </pre>
+      </div>
+      
+      <div class="scroll-animate">
+        <h3 class="text-2xl font-bold mb-4 uppercase tracking-widest text-shadow-glow">Connect</h3>
+        <p class="text-[#00FF41]/80 mb-2">
+          <span class="mr-2">>></span> Email: 
+          <a href="mailto:keshavpatidar9876@gmail.com" class="hover:text-white hover:text-shadow-glow transition-all duration-300">
+            keshavpatidar9876@gmail.com
+          </a>
+        </p>
+        <p class="text-[#00FF41]/80 mb-2">
+          <span class="mr-2">>></span> Phone: 
+          <a href="tel:917693062242" class="hover:text-white hover:text-shadow-glow transition-all duration-300">
+            7693062242
+          </a>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="flex justify-center gap-6 mb-8 scroll-animate">
+      <a href="https://linkedin.com/in/keshav-patidar-a043ba361" target="_blank" class="social-btn group">
+        <img src="https://img.icons8.com/ios-filled/30/ffffff/linkedin.png" alt="LinkedIn" class="matrix-filter group-hover:brightness-200">
+      </a>
+      <a href="https://github.com/KeshavPatidar01" target="_blank" class="social-btn group">
+        <img src="https://img.icons8.com/ios-filled/30/ffffff/github.png" alt="GitHub" class="matrix-filter group-hover:brightness-200">
+      </a>
+    </div>
+
+    <div class="flex justify-center space-x-4 text-[#00FF41]/60 text-sm mb-4 scroll-animate uppercase tracking-wider">
+      <a href="/privacy-policy" class="hover:text-[#00FF41] hover:text-shadow-glow transition-colors">[ Privacy_Policy ]</a>
+      <span class="opacity-50">|</span>
+      <a href="/terms-conditions" class="hover:text-[#00FF41] hover:text-shadow-glow transition-colors">[ Terms_&_Conditions ]</a>
+    </div>
+
+    <div class="text-center text-[#00FF41]/40 text-xs scroll-animate">
+      <p>&copy; 2025 DSA/NeuroLogic. System.All_Rights_Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Custom Matrix Utilities */
+  .text-shadow-glow {
+    text-shadow: 0 0 10px #00FF41, 0 0 20px #00FF41;
+  }
+  
+  .social-btn {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #00FF41;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px #003B00;
+  }
+
+  .social-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px #00FF41, inset 0 0 10px #00FF41;
+    background-color: #001100;
+  }
+
+  /* Filter to turn white icons into Matrix Green */
+  .matrix-filter {
+    filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+    transition: filter 0.3s ease;
+  }
+  
+  .group:hover .matrix-filter {
+     filter: brightness(0) saturate(100%) invert(100%); /* Turns white on hover */
+     drop-shadow: 0 0 5px #00FF41;
+  }
+
+</style>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Matrix Ruby: 60 Exercises</title>        <script src="https://cdn.tailwindcss.com"></script>        <script src="https://cdn.opalrb.com/opal/current/opal.js"></script>        <script src="https://cdn.opalrb.com/opal/current/opal-parser.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+        <style>
+                /* --- 1. GLOBAL THEME --- */
+                body {
+                font-family: 'VT323', monospace;
+                background-color: #000;
+                color: #00ff00;
+                }
+
+                /* Custom Scrollbar (Matrix Style) */
+                ::-webkit-scrollbar { width: 8px; height: 8px; }
+                ::-webkit-scrollbar-track { background: #000; border-left: 1px solid #003300; }
+                ::-webkit-scrollbar-thumb { background: #005500; border: 1px solid #00ff00; }
+                ::-webkit-scrollbar-thumb:hover { background: #00ff00; }
+
+                /* Remove Outline */
+                textarea:focus, select:focus, button:focus { outline: none; }
+
+                /* --- 2. MATRIX UTILITIES --- */
+                .matrix-text-glow { text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; }
+                .matrix-box-glow { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+                .matrix-border { border: 1px solid #00ff00; }
+
+                /* Button Style */
+                .btn-matrix {
+                background: #000;
+                border: 1px solid #00ff00;
+                color: #00ff00;
+                text-transform: uppercase;
+                transition: all 0.2s;
+                cursor: pointer;
+                }
+                .btn-matrix:hover {
+                background: #00ff00;
+                color: #000;
+                box-shadow: 0 0 15px #0f0;
+                }
+                .btn-matrix:active { transform: translateY(2px); }
+
+                /* Inputs/Selects */
+                .input-matrix {
+                background: #050505;
+                border: 1px solid #004400;
+                color: #00ff00;
+                font-family: 'VT323', monospace;
+                }
+                .input-matrix:focus {
+                border-color: #00ff00;
+                box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+                }
+
+                /* --- 3. CSS-ONLY RAIN ANIMATION --- */
+                @keyframes matrix-fall {
+                0% { transform: translateY(-100%); }
+                100% { transform: translateY(100vh); }
+                }
+                .rain-container {
+                position: absolute;
+                inset: 0;
+                overflow: hidden;
+                z-index: 0;
+                pointer-events: none;
+                }
+                .rain-col {
+                position: absolute;
+                top: -20%;
+                color: #0f0;
+                font-size: 1.5rem;
+                font-weight: bold;
+                opacity: 0.15; /* Subtle background */
+                user-select: none;
+                writing-mode: vertical-rl;
+                text-orientation: upright;
+                animation: matrix-fall linear infinite;
+                white-space: nowrap;
+                }
+                /* Randomize Rain Columns */
+                .rain-col:nth-child(1) { left: 5%;  animation-duration: 6s; animation-delay: -2s; }
+                .rain-col:nth-child(2) { left: 15%; animation-duration: 9s; animation-delay: -4s; }
+                .rain-col:nth-child(3) { left: 25%; animation-duration: 7s; animation-delay: -1s; }
+                .rain-col:nth-child(4) { left: 35%; animation-duration: 10s;animation-delay: -6s; }
+                .rain-col:nth-child(5) { left: 45%; animation-duration: 5s; animation-delay: -3s; }
+                .rain-col:nth-child(6) { left: 55%; animation-duration: 8s; animation-delay: -5s; }
+                .rain-col:nth-child(7) { left: 65%; animation-duration: 6s; animation-delay: -2s; }
+                .rain-col:nth-child(8) { left: 75%; animation-duration: 11s;animation-delay: -7s; }
+                .rain-col:nth-child(9) { left: 85%; animation-duration: 7s; animation-delay: -1s; }
+                .rain-col:nth-child(10){ left: 95%; animation-duration: 9s; animation-delay: -4s; }
+        </style>
+    </head>
+    <body class="bg-black text-green-500 min-h-screen flex flex-col md:h-screen md:overflow-hidden relative">
+
+        <div class="rain-container">
+            <div class="rain-col">1 0 1 A 4 F 2 0 9 1</div>
+            <div class="rain-col">0 1 0 1 B 7 3 A 0 1</div>
+            <div class="rain-col">A F 0 9 1 0 2 2 5 F</div>
+            <div class="rain-col">1 0 1 0 4 2 0 1 0 0</div>
+            <div class="rain-col">0 1 E 4 1 A 0 9 2 1</div>
+            <div class="rain-col">1 0 1 0 4 2 0 1 0 3</div>
+            <div class="rain-col">3 4 5 1 0 1 0 A B F</div>
+            <div class="rain-col">1 0 1 0 4 2 0 1 0 1</div>
+            <div class="rain-col">F F 0 1 A 9 1 0 2 0</div>
+            <div class="rain-col">1 0 1 0 4 2 0 1 0 1</div>
+        </div>
+
+        <div class="bg-black border-b border-green-800 flex flex-wrap items-center justify-between px-4 py-3 md:h-16 shadow-[0_0_15px_rgba(0,255,0,0.1)] gap-3 z-20 relative">
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+                <span class="text-2xl font-bold text-white matrix-text-glow tracking-widest whitespace-nowrap">
+                    > RUBY_MASTER<span class="animate-pulse">_</span>
+                </span>
+                <select id="lessonSelect" onchange="loadLesson(this.value)" class="input-matrix text-lg rounded px-3 py-1 w-full max-w-[280px] truncate">
+                </select>
+                <span id="progress" class="text-lg text-green-700 font-bold hidden sm:inline-block whitespace-nowrap border border-green-900 px-2"></span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-green-800 hidden md:inline font-mono">[ CTRL+ENTER TO EXECUTE ]</span>
+                <button onclick="runRuby()" class="btn-matrix px-6 py-2 rounded text-lg font-bold flex items-center gap-2">
+                    <span>[ EXECUTE ]</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10">
+
+            <div class="w-full md:w-1/3 md:min-w-[300px] bg-black bg-opacity-90 border-b md:border-b-0 md:border-r border-green-800 flex flex-col shrink-0 order-1 backdrop-blur-sm">
+                <div class="p-6 overflow-y-auto flex-1">
+                    <h2 id="lessonTitle" class="text-2xl font-bold text-white matrix-text-glow mb-2"></h2>
+
+                    <div class="h-1 w-full bg-green-900 mb-4 relative">
+                        <div class="absolute left-0 top-0 h-full w-20 bg-green-500 shadow-[0_0_10px_#0f0]"></div>
+                    </div>
+
+                    <div id="lessonDesc" class="text-lg text-green-400 leading-relaxed border border-green-900 p-4 bg-green-900 bg-opacity-10 rounded"></div>
+
+                    <div class="mt-6 flex gap-4">
+                        <button onclick="prevLesson()" class="btn-matrix px-4 py-2 text-sm flex-1">< PREV</button>
+                        <button onclick="nextLesson()" class="btn-matrix px-4 py-2 text-sm flex-1">NEXT ></button>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-green-900 text-xs text-green-800 text-center font-mono">
+                            > SYSTEM STATUS: AUTO-SAVE ACTIVE
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full md:w-2/3 flex flex-col relative bg-black order-2 md:h-auto h-80">
+
+                <div class="flex-1 relative flex flex-col min-h-[50%]">
+                    <textarea id="rubyCode" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                      class="flex-1 w-full bg-black text-green-300 p-6 text-xl resize-none border-none leading-relaxed font-mono"
+                      placeholder="# Initialize System..."></textarea>
+                    </div>
+
+                    <div class="h-[40%] md:h-80 bg-black border-t-2 border-green-600 flex flex-col shadow-[0_-5px_20px_rgba(0,255,0,0.1)]">
+                        <div class="flex items-center justify-between px-4 py-1 bg-green-900 bg-opacity-20 text-xs uppercase text-green-400 select-none border-b border-green-800">
+                            <span>> TERMINAL_OUTPUT</span>
+                            <span onclick="clearConsole()" class="cursor-pointer hover:text-white hover:bg-green-700 px-2 rounded">[ CLEAR LOGS ]</span>
+                        </div>
+                        <div id="output" class="p-4 text-sm overflow-y-auto text-green-400 flex-1 leading-snug font-mono ">
+                            <div class="text-green-800 italic">> Awaiting command input...</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <script>
+        // =========================================================
+                // 📚 THE 60 EXERCISES CURRICULUM
+                // =========================================================
+                const lessons = [
+                // --- LEVEL 1: BASICS ---
+                { title: "1. Hello World", desc: "Print 'Hello, Ruby!' to the console using `puts`.", code: "# Write your code below\nputs \"Hello, Ruby!\"" },
+                { title: "2. Personal Greeting", desc: "Define a variable `name = 'YourName'` and print 'Welcome, YourName'.", code: "name = \"\"\n# Print the welcome message\n" },
+                { title: "3. Simple Addition", desc: "Add two numbers 10 and 20 and print the result.", code: "# Calculate and print sum\n" },
+                { title: "4. Area Calculator", desc: "Calculate area of a rectangle with length 5 and width 3.", code: "length = 5\nwidth = 3\n# Print area\n" },
+                { title: "5. Variable Swap", desc: "Swap values of a=10 and b=20 without a temporary variable (Hint: Ruby supports `a, b = b, a`).", code: "a = 10\nb = 20\n# Swap them here\n\nputs a\nputs b" },
+                { title: "6. Unit Converter", desc: "Convert 5 kilometers to miles (1 km = 0.621371 miles).", code: "km = 5\n# Calculate miles\n" },
+                { title: "7. Data Types", desc: "Create a String, Integer, and Float. Print their classes using `.class`.", code: "# Example: puts 5.class\n" },
+                { title: "8. String Interpolation", desc: "Use `#{}` to insert a calculation (5 * 5) inside a string \"5 times 5 is ...\".", code: "# Print the string with interpolation\n" },
+                { title: "9. Square & Cube", desc: "Calculate the square and cube of 4 using `**` operator.", code: "num = 4\n# Print square\n# Print cube\n" },
+                { title: "10. Currency Fix", desc: "Convert 100 USD to INR (assume rate is 83.5).", code: "usd = 100\nrate = 83.5\n# Print INR value\n" },
+
+                // --- LEVEL 2: CONTROL FLOW ---
+                { title: "11. Odd or Even", desc: "Check if number 7 is even or odd using `if/else` and `%`.", code: "num = 7\n# Write if/else logic\n" },
+                { title: "12. Largest Number", desc: "Find the largest of x=10, y=20, z=15 using logical operators.", code: "x, y, z = 10, 20, 15\n# Print the largest\n" },
+                { title: "13. Leap Year", desc: "Check if year 2024 is a leap year (divisible by 4).", code: "year = 2024\n# Check if leap year\n" },
+                { title: "14. Grading System", desc: "If score > 90 print 'A', > 80 print 'B', else 'C'.", code: "score = 85\n# Logic here\n" },
+                { title: "15. Ternary Operator", desc: "Use `condition ? true_val : false_val` to check if 18 is an adult age.", code: "age = 18\n# Use ternary to print 'Adult' or 'Minor'\n" },
+                { title: "16. While Loop", desc: "Print numbers 1 to 5 using a `while` loop.", code: "i = 1\nwhile i <= 5\n  # Print and increment\nend" },
+                { title: "17. Times Loop", desc: "Use `10.times` to print 'Ruby' 10 times.", code: "# Write loop here\n" },
+                { title: "18. Until Loop", desc: "Use `until` to print numbers from 1 up to 5 (opposite of while).", code: "i = 1\n# Write until loop\n" },
+                { title: "19. Loop Control", desc: "Loop 1 to 10. `next` if number is 5, `break` if number is 8.", code: "(1..10).each do |n|\n  # Logic here\n  puts n\nend" },
+                { title: "20. Case Statement", desc: "Use `case` to check if variable `day` is 'Saturday' or 'Sunday' (Weekend) or else (Weekday).", code: "day = \"Saturday\"\n# Write case statement\n" },
+
+                // --- LEVEL 3: COLLECTIONS ---
+                { title: "21. Array Sum", desc: "Calculate sum of `[10, 20, 30, 40]`.", code: "arr = [10, 20, 30, 40]\nsum = 0\n# Loop and add\nputs sum" },
+                { title: "22. Array Filtering", desc: "Select only even numbers from `[1, 2, 3, 4, 5, 6]` using `.select`.", code: "nums = [1, 2, 3, 4, 5, 6]\n# Use .select\n" },
+                { title: "23. Array Mapping", desc: "Create a new array where every number in `[1, 2, 3]` is doubled using `.map`.", code: "nums = [1, 2, 3]\n# Use .map\n" },
+                { title: "24. Unique Elements", desc: "Remove duplicates from `[1, 1, 2, 2, 3]` using `.uniq`.", code: "nums = [1, 1, 2, 2, 3]\n# Remove duplicates\n" },
+                { title: "25. String Split", desc: "Turn the string 'apple,banana,grape' into an array.", code: "str = \"apple,banana,grape\"\n# Use .split\n" },
+                { title: "26. Hash Basics", desc: "Create a hash for a person with keys :name and :age. Print the name.", code: "person = { name: \"John\", age: 30 }\n# Print name\n" },
+                { title: "27. Hash Iteration", desc: "Loop through hash `{a: 1, b: 2}` and print 'Key: X, Value: Y'.", code: "data = { a: 1, b: 2 }\ndata.each do |k, v|\n  # Print\nend" },
+                { title: "28. Symbol vs String", desc: "Create a hash using Symbols as keys (`:key`) and another with Strings (`'key'`). Access both.", code: "# Symbols are faster/immutable\nh1 = { :a => 1 }\nh2 = { \"a\" => 1 }\n# Access them\n" },
+                { title: "29. Set Operations", desc: "Given `a = [1, 2, 3]` and `b = [3, 4, 5]`, find the intersection (`&`).", code: "a = [1, 2, 3]\nb = [3, 4, 5]\n# Find common elements\n" },
+                { title: "30. Word Frequency", desc: "Count occurrences of 'ruby' in `['ruby', 'python', 'ruby']` using a Hash.", code: "words = ['ruby', 'python', 'ruby']\ncounts = Hash.new(0)\n# Logic\nputs counts" },
+
+                // --- LEVEL 4: METHODS & BLOCKS ---
+                { title: "31. Basic Method", desc: "Define `def greet(name)` that returns 'Hello, name'.", code: "# Define method\n\nputs greet(\"Alice\")" },
+                { title: "32. Math Method", desc: "Write `add(a, b)` that returns the sum.", code: "# Define method\n\nputs add(5, 10)" },
+                { title: "33. Default Args", desc: "Write `power(n, e=2)` that squares a number by default, or uses exponent `e`.", code: "def power(n, e=2)\n  # Logic\nend\nputs power(5)\nputs power(5, 3)" },
+                { title: "34. Splat Operator", desc: "Write `sum_all(*nums)` that sums any number of arguments.", code: "def sum_all(*nums)\n  # Logic\nend\nputs sum_all(1, 2, 3, 4)" },
+                { title: "35. Implicit Return", desc: "Ruby returns the last line automatically. Write a method returning 100 without `return` keyword.", code: "def get_num\n  # Write 100 here\nend\nputs get_num" },
+                { title: "36. Blocks (Yield)", desc: "Write a method `do_twice` that calls `yield` two times.", code: "def do_twice\n  # yield twice\nend\ndo_twice { puts \"Hello\" }" },
+                { title: "37. Proc Objects", desc: "Create a Proc stored in variable `my_proc` that prints 'I am a proc'. Call it using `.call`.", code: "my_proc = Proc.new do\n  # Code\nend\n# Call it" },
+                { title: "38. Lambda", desc: "Create a lambda that takes `x` and squares it. Call it with 5.", code: "sq = -> (x) { x * x }\n# Call it\n" },
+                { title: "39. Recursion", desc: "Write a recursive method `factorial(n)`.", code: "def factorial(n)\n  # Base case and recursion\nend\nputs factorial(5)" },
+                { title: "40. Predicate Methods", desc: "Write method `is_even?(n)` returning true/false. (Ruby convention: boolean methods end in ?).", code: "def is_even?(n)\n  # logic\nend\nputs is_even?(4)" },
+
+                // --- LEVEL 5: OOP ---
+                { title: "41. Define Class", desc: "Create class `Dog`. Inside, method `bark` prints 'Woof'.", code: "class Dog\n  # Define method\nend\nDog.new.bark" },
+                { title: "42. Initialize", desc: "Add `initialize(name)` to Dog to set `@name`.", code: "class Dog\n  def initialize(name)\n    # Set instance var\n  end\nend\n" },
+                { title: "43. Getters", desc: "Use `attr_reader :name` to make `@name` accessible outside the class.", code: "class User\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\nend\nu = User.new(\"Sam\")\nputs u.name" },
+                { title: "44. Setters", desc: "Use `attr_writer` or `attr_accessor` to allow changing the name.", code: "class User\n  attr_accessor :name\nend\nu = User.new\nu.name = \"Bob\"\nputs u.name" },
+                { title: "45. Class Methods", desc: "Define `def self.info` in a class. Call it without creating an object.", code: "class Config\n  # Define self.info\nend\nputs Config.info" },
+                { title: "46. Inheritance", desc: "Create class `Car` inheriting from `Vehicle`. Car should override a `move` method.", code: "class Vehicle\n  def move; puts \"Moving\"; end\nend\nclass Car < Vehicle\n  # Override move\nend\nCar.new.move" },
+                { title: "47. Super", desc: "In `Car#move`, call `super` to run the parent's move method first.", code: "class Car < Vehicle\n  def move\n    super\n    puts \"Driving car\"\n  end\nend" },
+                { title: "48. Private Methods", desc: "Make a method `secret` private. Try calling it (it should fail), then call it from inside another public method.", code: "class Account\n  def show_data\n    secret\n  end\n  private\n  def secret; puts \"Secret\"; end\nend\nAccount.new.show_data" },
+                { title: "49. Class Variables", desc: "Use `@@count` to track how many objects of a class are created.", code: "class Counter\n  @@count = 0\n  def initialize; @@count += 1; end\n  def self.total; @@count; end\nend\nCounter.new\nputs Counter.total" },
+                { title: "50. To String", desc: "Override `to_s` method in a class to return a custom string representation.", code: "class Item\n  def to_s\n    \"I am an Item\"\n  end\nend\nputs Item.new" },
+
+                // --- LEVEL 6: ADVANCED ---
+                { title: "51. Modules", desc: "Create a module `MathHelper` with method `add`. Include it in a class.", code: "module MathHelper\n  def add(a,b); a+b; end\nend\nclass Calc\n  include MathHelper\nend\nputs Calc.new.add(1,2)" },
+                { title: "52. Mixins", desc: "Create a module 'Loggable' with a 'log' method and include it in a Service class.", code: "module Loggable\n  def log(msg); puts \"LOG: #{msg}\"; end\nend\nclass Service\n  include Loggable\nend\nService.new.log(\"Started\")" },
+                { title: "53. Namespaces", desc: "Put class `User` inside module `Admin`. Access it via `Admin::User.new`.", code: "module Admin\n  class User\n    def role; \"Admin\"; end\n  end\nend\nputs Admin::User.new.role" },
+                { title: "54. Error Handling", desc: "Use `begin...rescue` to handle a division by zero error.", code: "begin\n  puts 10 / 0\nrescue => e\n  puts \"Error: #{e.message}\"\nend" },
+                { title: "55. Custom Exceptions", desc: "Raise a standard error with `raise 'Something went wrong'`.", code: "def danger\n  # raise error here\nend\n\nbegin\n  danger\nrescue => e\n  puts e.message\nend" },
+                { title: "56. Structs", desc: "Create a quick class using `Struct.new(:name, :age)`.", code: "Person = Struct.new(:name, :age)\np = Person.new(\"Alex\", 25)\nputs p.name" },
+                { title: "57. Regex Match", desc: "Check if string contains email format using `=~ /pattern/`.", code: "email = \"test@test.com\"\nif email =~ /@/\n  puts \"Valid\"\nend" },
+                { title: "58. Date & Time", desc: "Use `Time.now` to print current time.", code: "# Print time\nputs Time.now" },
+                { title: "59. Monkey Patching", desc: "Add a method `shout` to the built-in `String` class that returns upcase.", code: "class String\n  def shout\n    self.upcase + \"!\"\n  end\nend\nputs \"hello\".shout" },
+                { title: "60. Algorithms: Bubble Sort", desc: "Implement bubble sort for `[3, 1, 4, 2]`.", code: "arr = [3, 1, 4, 2]\n# Implement bubble sort logic\n\np arr" }
+                ];
+
+                let currentLessonIndex = 0;
+                const textArea = document.getElementById('rubyCode');
+                const outputDiv = document.getElementById('output');
+
+                // =========================================================
+                // 🚀 INITIALIZATION
+                // =========================================================
+                window.onload = function() {
+                const select = document.getElementById('lessonSelect');
+                lessons.forEach((lesson, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.text = lesson.title;
+                select.appendChild(option);
+                });
+
+                // Load last saved lesson from LocalStorage or Default to 0
+                const savedIndex = localStorage.getItem('rubyMaster_lastIndex');
+                loadLesson(savedIndex ? parseInt(savedIndex) : 0);
+                };
+
+                // =========================================================
+                // ⌨️ EDITOR ENHANCEMENTS (Tab Key & Auto-Save)
+                // =========================================================
+
+                // 1. Tab Key Support (Inserts 2 spaces instead of changing focus)
+                textArea.addEventListener('keydown', function(e) {
+                // Tab Handler
+                if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                // Insert 2 spaces
+                this.value = this.value.substring(0, start) + "  " + this.value.substring(end);
+                // Move cursor
+                this.selectionStart = this.selectionEnd = start + 2;
+                saveCode(); // Auto-save on tab
+                }
+
+                // Ctrl+Enter / Cmd+Enter to Run
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                runRuby();
+                }
+                });
+
+                // 2. Auto Save on typing
+                textArea.addEventListener('input', function() {
+                saveCode();
+                });
+
+                function saveCode() {
+                localStorage.setItem(`rubyMaster_code_${currentLessonIndex}`, textArea.value);
+                }
+
+                // =========================================================
+                // ⚙️ LOGIC
+                // =========================================================
+
+                function loadLesson(index) {
+                index = parseInt(index);
+                currentLessonIndex = index;
+                const lesson = lessons[index];
+
+                // Save state of current index
+                localStorage.setItem('rubyMaster_lastIndex', index);
+
+                // Update UI
+                document.getElementById('lessonTitle').innerText = lesson.title;
+                document.getElementById('lessonDesc').innerText = lesson.desc;
+                document.getElementById('lessonSelect').value = index;
+                document.getElementById('progress').innerText = `${index + 1} / ${lessons.length}`;
+
+                // Check LocalStorage for saved code, else load default
+                const savedCode = localStorage.getItem(`rubyMaster_code_${index}`);
+                textArea.value = savedCode !== null ? savedCode : lesson.code;
+
+                // Visual feedback
+                clearConsole();
+                outputDiv.innerHTML += `<div class='text-green-800 mb-2 border-b border-green-800 pb-2'>LOADED: ${lesson.title}</div>`;
+                }
+
+                function nextLesson() {
+                if (currentLessonIndex < lessons.length - 1) loadLesson(currentLessonIndex + 1);
+                else alert("Course Complete! Congratulations!");
+                }
+
+                function prevLesson() {
+                if (currentLessonIndex > 0) loadLesson(currentLessonIndex - 1);
+                }
+
+                // =========================================================
+                // 💎 OPAL RUNNER
+                // =========================================================
+                Opal.load('opal-parser');
+
+                function runRuby() {
+                const code = textArea.value;
+                outputDiv.innerHTML += "<div class='text-green-800 mt-2 border-t border-green-900 pt-1'>$ ruby main.rb</div>";
+
+                try {
+                // Intercept STDOUT
+                Opal.gvars.stdout.write_proc = function(text) {
+                if (text === "") return;
+
+                const span = document.createElement('span');
+                span.innerText = text;
+                outputDiv.appendChild(span);
+
+                if (text.endsWith("\n")) {
+                outputDiv.appendChild(document.createElement('br'));
+                }
+                };
+
+                Opal.eval(code);
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+                } catch (err) {
+                outputDiv.innerHTML += `<div class="text-red-500 mt-1 bg-red-900 bg-opacity-20 p-2 rounded border border-red-900">SYSTEM ERROR: ${err}</div>`;
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+                }
+                }
+
+                function clearConsole() {
+                outputDiv.innerHTML = "<div class='text-green-800 italic'>> Awaiting command input...</div>";
+                }
+        </script>
+
+    </body>
+</html>

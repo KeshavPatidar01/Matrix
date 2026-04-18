@@ -1,0 +1,50 @@
+<style>
+        .matrix-input {
+        background: black;
+        color: #00ff00;
+        border: 1px solid #00ff00;
+        width: 100%;
+        }
+
+        .btn-matrix {
+        background: black;
+        color: #00ff00;
+        border: 1px solid #00ff00;
+        padding: 10px;
+        margin-top: 10px;
+        }
+
+        #ai-output {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #00ff00;
+        color: #00ff00;
+        background: black;
+        white-space: pre-wrap;
+        }
+</style>
+        <div>
+        <h2><%= post.post_title %></h2> 
+        <p><%= post.post_description %></p> 
+                <textarea id="prompt" rows="5" class="matrix-input" placeholder="Type your code or question"></textarea>
+                <button class="btn-matrix" onclick="sendToAI()">EXECUTE</button>  
+        <div id="ai-output"></div> 
+ </div>       
+                <script>         
+          function sendToAI() {      
+        const prompt = document.getElementById("prompt").value
+
+            fetch("<%= send_code_topic_post_path(@topic, @post) %>", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+            },
+            body: JSON.stringify({ prompt: prompt })
+            })
+            .then(res => res.json())
+            .then(data => {
+            document.getElementById("ai-output").innerText = data.generated_code
+            })
+            }
+    </script>

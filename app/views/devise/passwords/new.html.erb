@@ -1,0 +1,109 @@
+<div class="min-h-screen bg-black flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-mono relative overflow-hidden">
+  
+  <div class="absolute inset-0 z-0 pointer-events-none opacity-20" 
+       style="background-image: linear-gradient(#00FF41 1px, transparent 1px), linear-gradient(90deg, #00FF41 1px, transparent 1px); background-size: 40px 40px;">
+  </div>
+
+  <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+    <div class="mx-auto w-12 h-12 border border-[#00FF41] flex items-center justify-center mb-4 shadow-[0_0_10px_#00FF41]">
+      <span class="text-[#00FF41] text-2xl font-bold">?</span>
+    </div>
+    
+    <h2 class="mt-2 text-center text-3xl font-bold text-[#00FF41] tracking-widest text-shadow-glow uppercase">
+      > ACCESS_LOST
+    </h2>
+    <p class="mt-2 text-center text-sm text-[#00FF41]/70">
+      <span class="animate-pulse">_</span> Initiate credential recovery protocol.
+    </p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+    <div class="bg-black border border-[#00FF41] py-8 px-4 shadow-[0_0_20px_rgba(0,255,65,0.15)] sm:rounded-none sm:px-10 transition duration-500 hover:shadow-[0_0_30px_rgba(0,255,65,0.3)]">
+      
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        
+        <div class="text-red-500 font-mono text-xs mb-4">
+          <%= render "devise/shared/error_messages", resource: resource %>
+        </div>
+
+        <div class="space-y-6">
+          
+          <div>
+            <%= f.label :email, "TARGET_IDENTITY (EMAIL):", class: "block text-xs font-bold text-[#00FF41] uppercase tracking-wider mb-2" %>
+            <div class="relative group">
+               <span class="absolute top-0 left-0 h-full w-1 border-l border-t border-b border-[#00FF41] opacity-50 group-hover:opacity-100 transition-opacity"></span>
+              
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", 
+                  class: "appearance-none block w-full px-4 py-3 bg-black border-t border-b border-r border-[#003B00] text-[#00FF41] placeholder-[#00FF41]/30 shadow-inner focus:outline-none focus:border-[#00FF41] focus:ring-0 sm:text-sm transition duration-150 rounded-none ml-2", placeholder: "user@construct.net" %>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <%= f.submit "TRANSMIT_RESET_PACKET", 
+                class: "w-full flex justify-center py-3 px-4 border border-[#00FF41] rounded-none shadow-[0_0_10px_rgba(0,255,65,0.2)] text-sm font-bold text-[#00FF41] bg-black hover:bg-[#00FF41] hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00FF41] focus:ring-offset-black cursor-pointer transition duration-300 ease-in-out transform hover:scale-[1.02] uppercase tracking-widest" %>
+          </div>
+
+        </div>
+      <% end %>
+
+      <div class="mt-8">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-[#003B00]"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-black text-[#00FF41]/50 uppercase text-xs tracking-widest">
+              System_Navigation
+            </span>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex justify-center text-sm matrix-links">
+           <div class="text-[#00FF41] hover:text-white transition-colors duration-200">
+             <%= render "devise/shared/links" %>
+           </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Custom Effects */
+  .text-shadow-glow {
+    text-shadow: 0 0 10px #00FF41;
+  }
+  
+  /* Styling specific Devise links if they are standard anchors */
+  .matrix-links a {
+    color: #00FF41;
+    text-decoration: none;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 10px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  
+  .matrix-links a:hover {
+    color: white;
+    text-shadow: 0 0 8px #00FF41;
+  }
+  
+  .matrix-links a::before {
+    content: "[ ";
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .matrix-links a::after {
+    content: " ]";
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .matrix-links a:hover::before,
+  .matrix-links a:hover::after {
+    opacity: 1;
+  }
+</style>

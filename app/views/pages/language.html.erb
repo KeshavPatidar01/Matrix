@@ -1,0 +1,565 @@
+    <title>Complete Ruby Masterclass - Tailwind</title>
+    <style>
+        /* Original Code Syntax Highlighting Styles (Keep these as they are not standard Tailwind) */
+        .code-box .kwd { color: #ff7b72; font-weight: bold; } /* Keywords (if, else, def) */
+        .code-box .str { color: #a5d6ff; } /* Strings ("text") */
+        .code-box .num { color: #79c0ff; } /* Numbers (123) */
+        .code-box .com { color: #8b949e; font-style: italic; } /* Comments */
+        .code-box .typ { color: #d2a8ff; font-weight: bold; } /* Classes/Types */
+        .code-box .sym { color: #79c0ff; } /* Symbols :name */
+        .code-box .var { color: #ffa657; } /* Variables */
+        .code-box .met { color: #d2a8ff; } /* Methods */
+    </style>
+
+<body class="bg-[#0d1117] text-[#c9d1d9] font-sans m-0 p-0">
+
+    <div class="header-container w-full sticky top-0 z-10 bg-black/90 backdrop-blur-sm py-4 flex justify-center shadow-2xl">
+        <div class="button-group flex gap-4 bg-[#0d1117] p-1.5 rounded-full border border-[#30363d]">
+            <button id="englishBtn" class="bg-transparent border-none text-[#8b949e] py-2.5 px-8 text-base cursor-pointer rounded-full font-bold transition-all duration-300 hover:text-white">English</button>
+            <button id="hinglishBtn" class="active bg-[#238636] text-white py-2.5 px-8 text-base cursor-pointer rounded-full font-bold transition-all duration-300 shadow-md shadow-green-700/40 hover:bg-[#2ea043]">Hinglish</button>
+        </div>
+    </div>
+
+    <div class="content-wrapper max-w-4xl w-[95%] mx-auto mt-10 mb-12 box-border">
+        
+        <div class="text-center mb-12">
+            <h1 class="text-black text-4xl mb-2">Complete Ruby Masterclass</h1>
+            <p class="opacity-80 text-xl text-black">From "Hello World" to DSA Foundations (Detailed Edition)</p>
+            <a href="https://try.ruby-lang.org" target="_blank" class="compiler-btn block w-full text-center bg-[#238636] text-black py-4 rounded-lg no-underline font-bold text-xl mt-8 transition-colors duration-200 shadow-xl shadow-green-700/30 hover:bg-[#2ea043]">🚀 Open Online Compiler (Practice as you Read)</a>
+        </div>
+
+        <div id="EngT" class="hidden">
+            
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 1</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">The Anatomy of Ruby & Output</h2>
+                <p class="mb-5 text-lg">Before writing code, understand the machine. A computer CPU only understands binary (0s and 1s). It does not understand English or Ruby. So, how does code work?</p>
+                
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Interpreter vs Compiler (Interview Question)</span>
+                    <p class="text-base mb-2">Ruby is an <strong>Interpreted Language</strong>.</p>
+                    <ul class="list-disc pl-6 mb-0 text-base">
+                        <li class="mb-2"><strong>Compiled (C++, Java):</strong> Code is translated into a machine file (.exe) *before* running. If there is an error, it won't even start.</li>
+                        <li class="mb-2"><strong>Interpreted (Ruby, Python):</strong> An "Interpreter" reads your code line-by-line and executes it instantly. It's friendlier for learning but slightly slower in raw execution.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">The Art of Output</h3>
+                <p class="mb-5 text-lg">To communicate with the user, we send data to "STDOUT" (Standard Output), which is your screen.</p>
+                
+                <ul class="list-disc pl-6 mb-6">
+                    <li class="mb-3 text-lg"><code>puts</code>: Adds a "newline" character (<code>\n</code>) at the end. Think of it as hitting "Enter" after writing.</li>
+                    <li class="mb-3 text-lg"><code>print</code>: Writes text but keeps the cursor at the end of the line.</li>
+                    <li class="mb-3 text-lg"><code>p</code>: The debugger's friend. It prints the *raw* value (e.g., it shows quotes around strings).</li>
+                </ul>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="kwd">puts</span> <span class="str">"Hello"</span><br>
+                    <span class="kwd">print</span> <span class="str">"World"</span><br>
+                    <span class="kwd">print</span> <span class="str">"!"</span><br>
+                    <span class="com"># Output:<br>
+                    # Hello<br>
+                    # World!</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 2</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Variables, Objects & Symbols</h2>
+                <p class="mb-5 text-lg">In Ruby, <strong>Everything is an Object</strong>. Even a simple number like <code>5</code> is an object with methods attached to it.</p>
+                
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">1. The Standard Data Types</h3>
+                <ul class="list-disc pl-6 mb-6">
+                    <li class="mb-3 text-lg"><strong>String:</strong> Text data. <code>"Hello"</code>.</li>
+                    <li class="mb-3 text-lg"><strong>Integer:</strong> Whole numbers. <code>100</code>.</li>
+                    <li class="mb-3 text-lg"><strong>Float:</strong> Decimals. <code>10.5</code>.</li>
+                    <li class="mb-3 text-lg"><strong>Boolean:</strong> Logic gates. <code>true</code> / <code>false</code>.</li>
+                </ul>
+
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Pro Concept: Symbols (:name)</span>
+                    <p class="text-base mb-2">You will see this everywhere in Ruby (e.g., <code>:status</code>, <code>:id</code>). A <strong>Symbol</strong> is like a lightweight String.</p>
+                    <br>
+                    <p class="text-base mb-2"><strong>Why use them?</strong></p>
+                    <p class="text-base mb-0">Every time you type <code>"hello"</code>, Ruby creates a *new* object in memory. But <code>:hello</code> is created only **once**. It saves massive amounts of memory in large applications.</p>
+                </div>
+                
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">name</span> = <span class="str">"Alice"</span><br>
+                    <span class="var">status</span> = <span class="sym">:active</span>  <span class="com"># This is a Symbol</span><br><br>
+                    <span class="kwd">puts</span> name.class   <span class="com"># Output: String</span><br>
+                    <span class="kwd">puts</span> status.class <span class="com"># Output: Symbol</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 3</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">String Engineering</h2>
+                <p class="mb-5 text-lg">String manipulation is 50% of programming (parsing logs, user data, text processing).</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">Interpolation (The Gold Standard)</h3>
+                <p class="mb-5 text-lg">Never use <code>+</code> to join strings with variables. It is slow and error-prone. Use <code>#{}</code> inside double quotes.</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">Mutable vs Immutable</h3>
+                <p class="mb-5 text-lg">In Ruby, strings are <strong>mutable</strong>. You can change them in place.</p>
+                
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">greeting</span> = <span class="str">"hello"</span><br>
+                    <span class="var">greeting</span> &lt;&lt; <span class="str">" world"</span>  <span class="com"># Appends to the same memory location</span><br>
+                    <span class="kwd">puts</span> greeting  <span class="com"># "hello world"</span><br><br>
+                    
+                    <span class="var">text</span> = <span class="str">"ruby is fun"</span><br>
+                    <span class="kwd">puts</span> text.upcase    <span class="com"># "RUBY IS FUN" (Returns a COPY)</span><br>
+                    <span class="kwd">puts</span> text.upcase!   <span class="com"># "RUBY IS FUN" (Changes ORIGINAL variable)</span>
+                </div>
+                
+                <div class="warning-box bg-red-500/10 border-l-4 border-[#ff7b72] p-5 my-5 rounded-r-lg text-[#ff7b72]">
+                    <strong class="text-lg block mb-1">Bang Methods (!):</strong> Be careful with methods ending in <code>!</code>. They modify the original data permanently.
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 4</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Input & Type Conversion</h2>
+                <p class="mb-5 text-lg">When you get input from a user or a file, it is <strong>always a String</strong>. Even if the user types "50", the computer sees "50" (text), not 50 (number).</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">The Chomp & Convert Combo</h3>
+                <ul class="list-disc pl-6 mb-6">
+                    <li class="mb-3 text-lg"><code>gets</code>: Reads input + Enter key (newline).</li>
+                    <li class="mb-3 text-lg"><code>chomp</code>: Removes the Enter key.</li>
+                    <li class="mb-3 text-lg"><code>to_i</code> / <code>to_f</code>: Converts text to Integer or Float.</li>
+                </ul>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="kwd">puts</span> <span class="str">"Enter your age:"</span><br>
+                    <span class="var">age_text</span> = <span class="kwd">gets</span>.chomp  <span class="com"># User types "25" -> "25"</span><br>
+                    <span class="var">age_num</span> = age_text.to_i  <span class="com"># "25" -> 25</span><br><br>
+                    
+                    <span class="kwd">puts</span> <span class="str">"Next year you will be #{age_num + 1}"</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 5</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Control Flow & Logic</h2>
+                <p class="mb-5 text-lg">Beyond standard <code>if/else</code>, Ruby offers elegant ways to handle logic. 
+
+[Image of programming control flow diagram]
+</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">1. The 'Unless' Keyword</h3>
+                <p class="mb-5 text-lg">It means "If NOT". It runs the code only if the condition is **false**. It reads like natural English.</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">2. Ternary Operator (One-Liner)</h3>
+                <p class="mb-5 text-lg">Great for assigning values based on a quick check.</p>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">battery</span> = <span class="num">10</span><br><br>
+                    
+                    <span class="com"># Standard If</span><br>
+                    <span class="kwd">if</span> battery < <span class="num">20</span><br>
+                      <span class="kwd">puts</span> <span class="str">"Low Battery"</span><br>
+                    <span class="kwd">end</span><br><br>
+
+                    <span class="com"># Unless (Ruby Special)</span><br>
+                    <span class="kwd">unless</span> battery == <span class="num">100</span><br>
+                      <span class="kwd">puts</span> <span class="str">"Not fully charged"</span><br>
+                    <span class="kwd">end</span><br><br>
+                    
+                    <span class="com"># Ternary: condition ? true_val : false_val</span><br>
+                    <span class="var">status</span> = battery > <span class="num">50</span> ? <span class="str">"Good"</span> : <span class="str">"Bad"</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 6</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Arrays & Iterators (DSA Core)</h2>
+                <p class="mb-5 text-lg">Arrays in Ruby are dynamic. You don't need to define the size. They grow as you add data.</p>
+                
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Stack Operations (DSA)</span>
+                    <p class="text-base mb-2">Arrays naturally act as a "Stack" data structure (Last In, First Out).</p>
+                    <ul class="list-disc pl-6 mb-0 text-base">
+                        <li class="mb-2"><strong>push:</strong> Add to top.</li>
+                        <li class="mb-2"><strong>pop:</strong> Remove from top.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">The Power of .map (Transformation)</h3>
+                <p class="mb-5 text-lg"><code>.each</code> is for *doing* something. <code>.map</code> is for *transforming* data. It returns a new array.</p>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">nums</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]<br><br>
+                    
+                    <span class="com"># .map creates a NEW array where every item is squared</span><br>
+                    <span class="var">squared</span> = nums.map { |n| n * n }<br><br>
+                    
+                    <span class="kwd">p</span> squared  <span class="com"># Output: [1, 4, 9]</span><br>
+                    <span class="kwd">p</span> nums     <span class="com"># Output: [1, 2, 3] (Original is safe)</span>
+                </div>
+            </div>
+            
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 7</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Hashes (Key-Value Pairs)</h2>
+                <p class="mb-5 text-lg">Known as "Dictionaries" or "HashMaps" in other languages. This is the **fastest** way to find data. While an Array requires scanning 0, 1, 2... a Hash jumps directly to the key.</p>
+                
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="com"># New Syntax (JSON style)</span><br>
+                    <span class="var">person</span> = { <span class="sym">name:</span> <span class="str">"John"</span>, <span class="sym">age:</span> <span class="num">30</span>, <span class="sym">city:</span> <span class="str">"NYC"</span> }<br><br>
+                    
+                    <span class="kwd">puts</span> person[<span class="sym">:name</span>]  <span class="com"># Output: John</span><br>
+                    
+                    <span class="com"># Adding data</span><br>
+                    person[<span class="sym">:job</span>] = <span class="str">"Dev"</span><br><br>
+                    
+                    <span class="com"># Iterating a Hash</span><br>
+                    person.each <span class="kwd">do</span> |key, value|<br>
+                      <span class="kwd">puts</span> <span class="str">"#{key} is #{value}"</span><br>
+                    <span class="kwd">end</span>
+                </div>
+            </div>
+            
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 8</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Methods (Functions)</h2>
+                <p class="mb-5 text-lg">To write clean code, we follow <strong>DRY (Don't Repeat Yourself)</strong>. We bundle logic into methods.</p>
+                
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Implicit Return</span>
+                    <p class="text-base mb-0">In Ruby, you don't need to type <code>return</code>. The method automatically returns the result of the **last line** of code.</p>
+                </div>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="kwd">def</span> <span class="met">add_numbers</span>(<span class="var">a</span>, <span class="var">b</span>)<br>
+                      <span class="var">sum</span> = a + b<br>
+                      sum  <span class="com"># This is automatically returned</span><br>
+                    <span class="kwd">end</span><br><br>
+                    
+                    <span class="var">result</span> = add_numbers(<span class="num">5</span>, <span class="num">10</span>)<br>
+                    <span class="kwd">puts</span> result  <span class="com"># 15</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="HinT">
+            
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 1</span>
+                
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Ruby ki Anatomy aur Output</h2>
+                
+                <p class="mb-5 text-lg">Code likhne se pehle machine ko samajhna zaruri hai. CPU sirf binary (0s aur 1s) samajhta hai. Wo English ya Ruby nahi jaanta. Toh, code kaam kaise karta hai?</p>
+                
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Interpreter vs Compiler (Interview Question)</span>
+                    <p class="text-base mb-2">Ruby ek <strong>Interpreted Language</strong> hai.</p>
+                    <ul class="list-disc pl-6 mb-0 text-base">
+                        <li class="mb-2"><strong>Compiled (C++, Java):</strong> Pura code pehle ek machine file (.exe) mein convert hota hai, fir chalta hai. Agar ek bhi galti hui, to program start hi nahi hoga.</li>
+                        <li class="mb-2"><strong>Interpreted (Ruby, Python):</strong> Yahan ek "Interpreter" hota hai jo aapka code line-by-line padhta hai aur run karta hai. Ye seekhne mein aasaan hai par thoda slow ho sakta hai heavy tasks ke liye.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">Output dikhane ki Kala</h3>
+                <p class="mb-5 text-lg">User se baat karne ke liye hum "STDOUT" (Screen) par data bhejte hain.</p>
+                
+                <ul class="list-disc pl-6 mb-6">
+                    <li class="mb-3 text-lg"><code>puts</code>: Ye text print karta hai aur end mein "Enter" daba deta hai (Cursor nayi line par chala jata hai).</li>
+                    <li class="mb-3 text-lg"><code>print</code>: Ye text print karta hai par cursor wahin chipka rehta hai.</li>
+                    <li class="mb-3 text-lg"><code>p</code>: Ye debugging ke liye hai. Ye raw data dikhata hai (Jaise strings ke aas paas quotes bhi dikhayega).</li>
+                </ul>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="kwd">puts</span> <span class="str">"Hello"</span><br>
+                    <span class="kwd">print</span> <span class="str">"World"</span><br>
+                    <span class="kwd">print</span> <span class="str">"!"</span><br>
+                    <span class="com"># Output:<br>
+                    # Hello<br>
+                    # World!</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 2</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Variables, Objects aur Symbols</h2>
+                <p class="mb-5 text-lg">Ruby mein <strong>Har cheez ek Object hai</strong>. Even ek simple number <code>5</code> bhi ek object hai jiske paas methods hote hain.</p>
+                
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">1. Standard Data Types</h3>
+                <ul class="list-disc pl-6 mb-6">
+                    <li class="mb-3 text-lg"><strong>String:</strong> Text data. <code>"Mera Naam"</code>.</li>
+                    <li class="mb-3 text-lg"><strong>Integer:</strong> Poore number. <code>100</code>.</li>
+                    <li class="mb-3 text-lg"><strong>Float:</strong> Point wale number. <code>10.5</code>.</li>
+                    <li class="mb-3 text-lg"><strong>Boolean:</strong> Haan ya Na. <code>true</code> / <code>false</code>.</li>
+                </ul>
+
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Pro Concept: Symbols (:name)</span>
+                    <p class="text-base mb-2">Aap Ruby code mein har jagah colon wale words dekhenge (jaise <code>:status</code>, <code>:id</code>). Inhe <strong>Symbol</strong> kehte hain.</p>
+                    <br>
+                    <p class="text-base mb-2"><strong>Inka use kyu karein?</strong></p>
+                    <p class="text-base mb-0">Jab aap <code>"hello"</code> likhte hain, Ruby har baar memory mein ek nayi jagah banata hai. Par <code>:hello</code> (symbol) pure program mein sirf **ek baar** banta hai. Ye badi applications mein memory bachata hai.</p>
+                </div>
+                
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">name</span> = <span class="str">"Alice"</span><br>
+                    <span class="var">status</span> = <span class="sym">:active</span>  <span class="com"># Ye Symbol hai</span><br><br>
+                    <span class="kwd">puts</span> name.class   <span class="com"># Output: String</span><br>
+                    <span class="kwd">puts</span> status.class <span class="com"># Output: Symbol</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 3</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">String Engineering (Text ka Khel)</h2>
+                <p class="mb-5 text-lg">Programming ka 50% hissa sirf text handle karna hota hai (Logs padhna, user data saf karna).</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">Interpolation (Sahi Tarika)</h3>
+                <p class="mb-5 text-lg">Variables ko string ke saath jodne ke liye kabhi <code>+</code> mat use karo. Ye slow hai. Hamesha <code>#{}</code> use karo double quotes ke andar.</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">Mutable vs Immutable</h3>
+                <p class="mb-5 text-lg">Ruby mein Strings <strong>mutable</strong> hoti hain. Matlab aap unhe original jagah par hi badal sakte hain.</p>
+                
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">greeting</span> = <span class="str">"hello"</span><br>
+                    <span class="var">greeting</span> &lt;&lt; <span class="str">" world"</span>  <span class="com"># Ye usi variable mein jud gaya</span><br>
+                    <span class="kwd">puts</span> greeting  <span class="com"># "hello world"</span><br><br>
+                    
+                    <span class="var">text</span> = <span class="str">"ruby is fun"</span><br>
+                    <span class="kwd">puts</span> text.upcase    <span class="com"># "RUBY IS FUN" (Ye ek COPY return karta hai)</span><br>
+                    <span class="kwd">puts</span> text.upcase!   <span class="com"># "RUBY IS FUN" (Ye ORIGINAL variable badal deta hai)</span>
+                </div>
+                
+                <div class="warning-box bg-red-500/10 border-l-4 border-[#ff7b72] p-5 my-5 rounded-r-lg text-[#ff7b72]">
+                    <strong class="text-lg block mb-1">Bang Methods (!):</strong> Jin methods ke end mein <code>!</code> hota hai, unse savdhaan rahein. Wo original data ko permanent change kar dete hain.
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 4</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Input & Type Conversion</h2>
+                <p class="mb-5 text-lg">Jab aap user se input lete hain, wo <strong>hamesha String</strong> hota hai. Agar user "50" likhta hai, computer use text maanta hai, number nahi.</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">Chomp aur Convert ka Formula</h3>
+                <ul class="list-disc pl-6 mb-6">
+                    <li class="mb-3 text-lg"><code>gets</code>: Input leta hai + Enter key (newline) bhi save karta hai.</li>
+                    <li class="mb-3 text-lg"><code>chomp</code>: Enter key (new line) ko kaat deta hai.</li>
+                    <li class="mb-3 text-lg"><code>to_i</code> / <code>to_f</code>: Text ko Integer ya Float mein convert karta hai.</li>
+                </ul>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="kwd">puts</span> <span class="str">"Apni age batayein:"</span><br>
+                    <span class="var">age_text</span> = <span class="kwd">gets</span>.chomp  <span class="com"># User ne likha "25" -> Variable bana "25"</span><br>
+                    <span class="var">age_num</span> = age_text.to_i  <span class="com"># "25" -> ban gaya 25 (Maths ke layak)</span><br><br>
+                    
+                    <span class="kwd">puts</span> <span class="str">"Agle saal aap #{age_num + 1} ke honge"</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 5</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Control Flow (Faisla Lena)</h2>
+                <p class="mb-5 text-lg">Standard <code>if/else</code> ke alawa, Ruby mein logic likhne ke kaafi sundar tarike hain. </p>
+                
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">1. The 'Unless' Keyword (Ruby Special)</h3>
+                <p class="mb-5 text-lg">Iska matlab hai "Agar NAHI". Ye code tabhi chalta hai jab condition **Jhoot (False)** ho.</p>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">2. Ternary Operator (Ek Line ka Magic)</h3>
+                <p class="mb-5 text-lg">Chhoti conditions ke liye 5 line ka code likhne ki zarurat nahi hai.</p>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">battery</span> = <span class="num">10</span><br><br>
+                    
+                    <span class="com"># Aam Zindagi (Standard If)</span><br>
+                    <span class="kwd">if</span> battery < <span class="num">20</span><br>
+                      <span class="kwd">puts</span> <span class="str">"Low Battery"</span><br>
+                    <span class="kwd">end</span><br><br>
+
+                    <span class="com"># Mentos Zindagi (Unless)</span><br>
+                    <span class="kwd">unless</span> battery == <span class="num">100</span><br>
+                      <span class="kwd">puts</span> <span class="str">"Full charge nahi hai"</span><br>
+                    <span class="kwd">end</span><br><br>
+                    
+                    <span class="com"># Ternary: condition ? agar_sach_hai : agar_jhoot_hai</span><br>
+                    <span class="var">status</span> = battery > <span class="num">50</span> ? <span class="str">"Badhiya"</span> : <span class="str">"Khatra"</span>
+                </div>
+            </div>
+
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 6</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Arrays & Iterators (DSA ki Jaan)</h2>
+                <p class="mb-5 text-lg">Ruby mein Arrays dynamic hote hain. Size batane ki zarurat nahi, jitna data daaloge wo badhte jayenge.</p>
+                
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Stack Operations (DSA)</span>
+                    <p class="text-base mb-2">Arrays naturally "Stack" ki tarah kaam karte hain (Last In, First Out).</p>
+                    <ul class="list-disc pl-6 mb-0 text-base">
+                        <li class="mb-2"><strong>push:</strong> Upar add karo.</li>
+                        <li class="mb-2"><strong>pop:</strong> Upar se hatao.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-[#d2a8ff] mt-8 text-2xl mb-4">.map ki Taakat (Transformation)</h3>
+                <p class="mb-5 text-lg"><code>.each</code> sirf loop ghumane ke liye hai. <code>.map</code> data ko **badalne (transform)** ke liye hai. Ye ek naya array return karta hai.</p>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="var">nums</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]<br><br>
+                    
+                    <span class="com"># .map ek NAYA array banata hai jisme har number square ho gaya</span><br>
+                    <span class="var">squared</span> = nums.map { |n| n * n }<br><br>
+                    
+                    <span class="kwd">p</span> squared  <span class="com"># Output: [1, 4, 9]</span><br>
+                    <span class="kwd">p</span> nums     <span class="com"># Output: [1, 2, 3] (Purana wala safe hai)</span>
+                </div>
+            </div>
+            
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 7</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Hashes (Key-Value Pairs)</h2>
+                <p class="mb-5 text-lg">Ise dusri languages mein "Dictionaries" ya "HashMap" kehte hain. Data dhoondne ka ye **sabse tez** tarika hai. Array mein computer ko 0, 1, 2... karke dhoondna padta hai, Hash mein wo seedha "Key" par jump karta hai.</p>
+                
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="com"># Naya Syntax (JSON style)</span><br>
+                    <span class="var">person</span> = { <span class="sym">name:</span> <span class="str">"Amit"</span>, <span class="sym">age:</span> <span class="num">30</span>, <span class="sym">city:</span> <span class="str">"Delhi"</span> }<br><br>
+                    
+                    <span class="kwd">puts</span> person[<span class="sym">:name</span>]  <span class="com"># Output: Amit</span><br>
+                    
+                    <span class="com"># Data add karna</span><br>
+                    person[<span class="sym">:job</span>] = <span class="str">"Coder"</span><br><br>
+                    
+                    <span class="com"># Hash par loop chalana</span><br>
+                    person.each <span class="kwd">do</span> |key, value|<br>
+                      <span class="kwd">puts</span> <span class="str">"#{key} hai #{value}"</span><br>
+                    <span class="kwd">end</span>
+                </div>
+            </div>
+            
+            <div class="chapter-card bg-[#161b22] border border-[#30363d] rounded-xl p-10 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 bg-[#58a6ff] h-full"></div>
+                <span class="chapter-number inline-block text-[#58a6ff] font-bold uppercase tracking-wider mb-1 text-sm">Chapter 8</span>
+                <h2 class="text-white text-3xl border-b-2 border-[#30363d] pb-4 mt-0">Methods (Functions)</h2>
+                <p class="mb-5 text-lg">Saaf code likhne ke liye hum <strong>DRY (Don't Repeat Yourself)</strong> rule follow karte hain. Hum logic ko methods mein band kar dete hain taaki baar baar na likhna pade.</p>
+                
+                <div class="concept-box bg-blue-500/10 border-l-4 border-[#1f6feb] p-6 my-6 rounded-r-lg">
+                    <span class="concept-title font-bold text-[#79c0ff] block mb-2 text-lg uppercase">Implicit Return (Ruby ka Magic)</span>
+                    <p class="text-base mb-0">Ruby mein <code>return</code> likhna zaruri nahi hota. Method ki **aakhiri line** ka jo bhi result hoga, wo automatically return ho jata hai.</p>
+                </div>
+
+                <div class="code-box bg-[#0d1117] border border-[#30363d] rounded-lg p-6 font-mono text-lg overflow-x-auto my-6 text-[#e6edf3] border-l-6 border-accent-green shadow-inner shadow-black/20">
+                    <span class="kwd">def</span> <span class="met">jod_do</span>(<span class="var">a</span>, <span class="var">b</span>)<br>
+                      <span class="var">sum</span> = a + b<br>
+                      sum  <span class="com"># Ye khud wapas chala jayega (return)</span><br>
+                    <span class="kwd">end</span><br><br>
+                    
+                    <span class="var">result</span> = jod_do(<span class="num">5</span>, <span class="num">10</span>)<br>
+                    <span class="kwd">puts</span> result  <span class="com"># 15</span>
+                </div>
+
+
+
+
+        </div>
+
+    </div>
+
+    <script>
+        const englishBtn = document.getElementById("englishBtn");
+        const hinglishBtn = document.getElementById("hinglishBtn");
+        const EngT = document.getElementById("EngT");
+        const HinT = document.getElementById("HinT");
+
+        // Function to set active button state using Tailwind classes
+        function setActiveButton(button) {
+            // Remove active classes from both
+            englishBtn.classList.remove('bg-[#238636]', 'text-white', 'shadow-md', 'shadow-green-700/40');
+            englishBtn.classList.add('text-[#8b949e]');
+            
+            hinglishBtn.classList.remove('bg-[#238636]', 'text-white', 'shadow-md', 'shadow-green-700/40');
+            hinglishBtn.classList.add('text-[#8b949e]');
+
+            // Add active classes to the selected button
+            button.classList.add('bg-[#238636]', 'text-white', 'shadow-md', 'shadow-green-700/40');
+            button.classList.remove('text-[#8b949e]');
+        }
+
+        englishBtn.addEventListener('click', () => {
+            EngT.classList.remove('hidden');
+            HinT.classList.add('hidden');
+            setActiveButton(englishBtn);
+        });
+
+        hinglishBtn.addEventListener('click', () => {
+            HinT.classList.remove('hidden');
+            EngT.classList.add('hidden');
+            setActiveButton(hinglishBtn);
+        });
+
+        // Initial setup on load (default to Hinglish if active class is present)
+        if (hinglishBtn.classList.contains('active')) {
+            hinglishBtn.click();
+        } else {
+            englishBtn.click();
+        }
+
+
+
+
+
+
+// THIS CODE FORCES THE PAGE TO RELOAD BECAUSE TO CHANGE GIFS ACCORDING TO NOTES, BECAUSE BEFORE WE USE HOTWIRE FOR NOT RELOADING PAGE WHEN WE CREATING NOTES, TEHREFORE WE HAVE TO RUN THIS RELOAD FUNCTION HERE
+window.addEventListener( "pageshow", function ( event ) {
+  var historyTraversal = event.persisted || 
+                         ( typeof window.performance != "undefined" && 
+                              window.performance.navigation.type === 2 );
+  if ( historyTraversal ) {
+    // Handle page restore.
+    window.location.reload();
+    if(performance.navigation.type == 2){
+   location.reload(true);
+}
+  }
+});
+    </script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
