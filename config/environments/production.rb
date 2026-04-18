@@ -83,8 +83,7 @@ config.hosts.clear
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com
   #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  config.action_cable.mount_path = nil
-config.action_cable.adapter = :async
+
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
