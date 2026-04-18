@@ -90,16 +90,20 @@ config.hosts.clear
   config.action_mailer.raise_delivery_errors = true # Deployment ke time errors dekhne ke liye isko true rakhna acha hai
   config.action_mailer.default_url_options = { host: ENV.fetch("DOMAIN", "your-app-name.onrender.com") }
 
+ # ActionMailer Config for Production (Gmail)
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { host: ENV.fetch("DOMAIN", "matrix-iwan.onrender.com"), protocol: 'https' }
+
   config.action_mailer.smtp_settings = {
-    address:              "smtp.gmail.com",
+    address:              'smtp.gmail.com',
     port:                 587,
-    domain:               ENV.fetch("DOMAIN", "your-app-name.onrender.com"),
+    domain:               'gmail.com', # <--- Yahan apna app domain nahi, gmail.com daalein
     user_name:            ENV['SMTP_USERNAME'],
     password:             ENV['SMTP_PASSWORD'],
     authentication:       :plain,
-    enable_starttls_auto: true,
-    open_timeout:         5,
-    read_timeout:         5
+    enable_starttls_auto: true
   }
   #
   # Skip DNS rebinding protection for the default health check endpoint.
