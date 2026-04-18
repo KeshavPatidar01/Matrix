@@ -27,7 +27,11 @@ threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 port ENV.fetch("PORT", 3000)
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
+puts "--- RUNNING DATABASE MIGRATIONS ---"
+system("bundle exec rails db:prepare")
+puts "--- MIGRATIONS FINISHED ---"
 
+# Iske niche aapka purana Puma ka code waise hi rahega...
 
 
 # Allow puma to be restarted by `bin/rails restart` command.
