@@ -1,0 +1,5 @@
+comment = 'vector data type and ivfflat and hnsw access methods'
+CREATE EXTENSION vector;
+default_version = '0.8.1'
+module_pathname = '$libdir/vector'
+relocatable = true
